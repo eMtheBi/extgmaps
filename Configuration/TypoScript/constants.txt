@@ -1,0 +1,14 @@
+plugin.tx_extgmaps {
+	view {
+		# cat=plugin.tx_extgmaps/file; type=string; label=Path to template root (FE)
+		templateRootPath = EXT:extgmaps/Resources/Private/Templates/
+		# cat=plugin.tx_extgmaps/file; type=string; label=Path to template partials (FE)
+		partialRootPath = EXT:extgmaps/Resources/Private/Partials/
+		# cat=plugin.tx_extgmaps/file; type=string; label=Path to template layouts (FE)
+		layoutRootPath = EXT:extgmaps/Resources/Private/Layouts/
+	}
+	persistence {
+		# cat=plugin.tx_extgmaps//a; type=string; label=Default storage PID
+		storagePid =
+	}
+}

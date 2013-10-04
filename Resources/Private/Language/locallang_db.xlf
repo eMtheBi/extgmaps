@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2013-10-04T21:12:37Z" product-name="extgmaps">
+		<header/>
+		<body>
+
+			<trans-unit id="tx_extgmaps_domain_model_page">
+				<source>Page</source>
+			</trans-unit>
+			<trans-unit id="tx_extgmaps_domain_model_page.latitude">
+				<source>Latitude</source>
+			</trans-unit>
+			<trans-unit id="tx_extgmaps_domain_model_page.longitude">
+				<source>Longitude</source>
+			</trans-unit>
+			<trans-unit id="tx_extgmaps_domain_model_page.tags">
+				<source>Tags</source>
+			</trans-unit>
+			
+			<trans-unit id="pages.tx_extbase_type.Tx_Extgmaps_Page">
+				<source>extended goggle maps extension Page</source>
+			</trans-unit>
+			
+			<trans-unit id="tx_extgmaps_domain_model_content">
+				<source>Content</source>
+			</trans-unit>
+			<trans-unit id="tx_extgmaps_domain_model_content.latitude">
+				<source>Latitude</source>
+			</trans-unit>
+			<trans-unit id="tx_extgmaps_domain_model_content.longitude">
+				<source>Longitude</source>
+			</trans-unit>
+			<trans-unit id="tx_extgmaps_domain_model_content.tags">
+				<source>Tags</source>
+			</trans-unit>
+			
+			<trans-unit id="tt_content.tx_extbase_type.Tx_Extgmaps_Content">
+				<source>extended goggle maps extension Content</source>
+			</trans-unit>
+			
+			<trans-unit id="tx_extgmaps_domain_model_tags">
+				<source>Tags</source>
+			</trans-unit>
+			<trans-unit id="tx_extgmaps_domain_model_tags.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_extgmaps_domain_model_tags.map_icon">
+				<source>Map Icon</source>
+			</trans-unit>
+
+		</body>
+	</file>
+</xliff>

@@ -1,0 +1,28 @@
+config.tx_extbase{
+    persistence{
+        classes{
+
+            emthebi\Extgmaps\Domain\Model\Page {
+                mapping {
+                    tableName = pages
+                    #recordType = Tx_Extgmaps_Page
+                    columns {
+						#bodytext.mapOnProperty = bodytext
+					}
+                }
+            }
+            
+            emthebi\Extgmaps\Domain\Model\Content {
+                mapping {
+                    tableName = tt_content
+                    #recordType = Tx_Extgmaps_Content
+                    columns {
+						CType.mapOnProperty = contentType
+						bodytext.mapOnProperty = bodytext
+					}
+                }
+            }
+            
+    	}
+    }
+}

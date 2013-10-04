@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2013-10-04T21:12:37Z" product-name="extgmaps">
+		<header/>
+		<body>
+
+			<trans-unit id="latitude.description">
+				<source>latitude for content</source>
+			</trans-unit>
+			<trans-unit id="longitude.description">
+				<source>longitude for content</source>
+			</trans-unit>
+			<trans-unit id="tags.description">
+				<source>tags</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
