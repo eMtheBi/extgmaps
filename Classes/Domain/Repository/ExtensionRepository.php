@@ -61,8 +61,8 @@ class ExtensionRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 			$query->getQuerySettings()->setStoragePageIds(array($pid));
 		}
 		$where = array();
-		$where[] = $query->greaterThan('tags',0);
-		$where[] = $query->greaterThan('categories',0);
+//		$where[] = $query->greaterThan('tags',0);
+//		$where[] = $query->greaterThan('categories',0);
 		$where[] = $query->greaterThan('longitude',0);
 		$where[] = $query->greaterThan('latitude',0);
 		$query->matching($query->logicalAnd($where));

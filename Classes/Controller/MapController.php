@@ -53,6 +53,15 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 	protected $contentRepository;
 
 	/**
+	 * @throws \TYPO3\CMS\Extbase\Exception
+	 */
+	public function initializeAction() {
+		if (empty($this->settings)) {
+			throw new \TYPO3\CMS\Extbase\Exception('please include staticFile / TS setup (1381006069)',1381006069);
+		}
+	}
+
+	/**
 	 * Action for map which has to be placed on pages
 	 */
 	public function contentMapAction() {
@@ -80,9 +89,30 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 //				}
 //			}
 		}
+		$gridSize = $this->getContentMapGridSize();
 
+		$this->view->assign('gridSize',$gridSize);
 		$this->view->assign('mapObjects',$mapObjects);
 	}
+
+	/**
+	 * return gridSize
+	 * @return int value of gridSize
+	 * @throws \TYPO3\CMS\Extbase\Exception
+	 */
+	protected function getContentMapGridSize() {
+		if (isset($this->settings['flexFormGridSize'])) {
+			$gridSize = $this->settings['flexFormGridSize'];
+		} else {
+			if (!isset($this->settings['fallbackGridSize'])) {
+				throw new \TYPO3\CMS\Extbase\Exception('no fallback gridSize found (1381007299)',1381007299);
+			}
+			$gridSize = $this->settings['fallbackGridSize'];
+		}
+
+		return $gridSize;
+	}
+
 }
 
 ?>

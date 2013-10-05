@@ -226,14 +226,15 @@ $addToPages = array(
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns("pages", $addToPages, 1);
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes("pages",
 	"--div--;GeoVerortung,map,latitude,longitude,tags,categories,header,image"
-//	,
-//	"--div--;Header,header"
-//	,
-//	"--div--;Image,image"
 );
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns("tt_content", $addToTca, 1);
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes("tt_content",
 	"--div--;GeoVerortung,map,latitude,longitude,tags,categories"
 );
 
+// FlexForms
+$pluginSignature = $_EXTKEY . '_contentmap';
+$TCA['tt_content']['types']['list']['subtypes_excludelist'][$pluginSignature] = 'layout,select_key,pages';
+$TCA['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue($pluginSignature, 'FILE:EXT:'.$_EXTKEY . '/Configuration/FlexForms/contentMapConfig.xml');
 ?>

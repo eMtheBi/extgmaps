@@ -64,6 +64,14 @@
 				<source>Map Icon</source>
 			</trans-unit>
 
+
+			<trans-unit id="contentMapFlexForm.sheetTitle">
+				<source>content map config</source>
+			</trans-unit>
+			<trans-unit id="contentMapFlexForm.gridSize">
+				<source>Cluster gridSize</source>
+			</trans-unit>
+
 		</body>
 	</file>
 </xliff>

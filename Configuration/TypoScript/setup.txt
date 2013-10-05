@@ -37,3 +37,6 @@ plugin.tx_extgmaps._CSS_DEFAULT_STYLE (
 		vertical-align:top;
 	}
 )
+plugin.tx_extgmaps.settings {
+	fallbackGridSize = 10
+}

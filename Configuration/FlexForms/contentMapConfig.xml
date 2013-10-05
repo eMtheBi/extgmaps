@@ -1,0 +1,26 @@
+<T3DataStructure>
+	<meta>
+		<langDisable>1</langDisable>
+	</meta>
+	<sheets>
+		<sDEF>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:extgmaps/Resources/Private/Language/locallang_db.xlf:contentMapFlexForm.sheetTitle</sheetTitle>
+				</TCEforms>
+				<type>array</type>
+				<el>
+                    <settings.flexFormGridSize>
+                        <TCEforms>
+                            <label>LLL:EXT:extgmaps/Resources/Private/Language/locallang_db.xlf:contentMapFlexForm.gridSize</label>
+							<config>
+								<type>input</type>
+								<size>4</size>
+							</config>
+                        </TCEforms>
+                    </settings.flexFormGridSize>
+				</el>
+			</ROOT>
+		</sDEF>
+	</sheets>
+</T3DataStructure>

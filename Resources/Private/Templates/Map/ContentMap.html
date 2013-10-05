@@ -1,7 +1,50 @@
-<f:layout name="Default"/>
+{namespace ext=emthebi\extgmaps\ViewHelpers}
+
+<f:layout name="Default" />
 <f:section name="main">
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script type="text/javascript">
+        var jQuery2 = jQuery.noConflict();
+        var mapData = [];
+    </script>
+    <ext:javaScript footer="1">
+        var gridSize = '{gridSize}';
+    </ext:javaScript>
+    <ext:javaScript src="infobox" footer="1" />
+    <ext:javaScript src="markerclusterer" footer="1" />
+    <ext:javaScript src="Map" footer="1" />
     <f:for each="{mapObjects}" as="mapObject">
         <div>{mapObject.title}</div>
-        <div><f:image src="{mapObject.image.uid}" alt="{mapObject.image.title}" width="150" height="100" treatIdAsReference="1" /></div>
+        <script>
+            var title = '{mapObject.title}';
+            var image = '{mapObject.image.publicUrl}';
+            var imageTitle = '{mapObject.image.title}';
+            var latitude = '{mapObject.latitude}';
+            var longitude = '{mapObject.longitude}';
+            var header = '{mapObject.header}';
+            var uid = '{mapObject.uid}';
+            mapData.push([title, image, imageTitle, latitude, longitude, header, uid]);
+        </script>
+        <ext:javaScript>
+            var test123 = '123';
+        </ext:javaScript>
+        <ext:css>
+            .extGMapsInfobox {
+            height: 200px;
+            }
+        </ext:css>
+        <ext:css src="ContentMap" />
+
+        <f:comment>
+            <div>
+                <f:image src="{mapObject.image.uid}" alt="{mapObject.image.title}" width="150" height="100" treatIdAsReference="1" />
+            </div>
+        </f:comment>
+
     </f:for>
+    <script>
+        console.log(mapData);
+    </script>
+    <div id="js_extGMaps" class="extGMaps"></div>
 </f:section>
