@@ -1,0 +1,7 @@
+<f:layout name="Default"/>
+<f:section name="main">
+    <f:for each="{mapObjects}" as="mapObject">
+        <div>{mapObject.title}</div>
+        <div><f:image src="{mapObject.image.uid}" alt="{mapObject.image.title}" width="150" height="100" treatIdAsReference="1" /></div>
+    </f:for>
+</f:section>

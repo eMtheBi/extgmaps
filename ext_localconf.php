@@ -5,14 +5,14 @@ if (!defined('TYPO3_MODE')) {
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
 	'emthebi.' . $_EXTKEY,
-	'Articlemap',
+	'ContentMap',
 	array(
-		'Map' => 'test',
+		'Map' => 'contentMap',
 		
 	),
 	// non-cacheable actions
 	array(
-		'Map' => 'test',
+		'Map' => 'contentMap',
 		
 	)
 );
@@ -30,5 +30,6 @@ if (!defined('TYPO3_MODE')) {
 		
 	)
 );
-
+//$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] = 'EXT:' . $_EXTKEY . '/Hooks/TceHook.php:TceHook';
+//$TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] = 'EXT:' . $_EXTKEY . '/Hooks/TceHook.php:&emthebi\\Extgmaps\\Hooks\\TceMap->displayMap';
 ?>

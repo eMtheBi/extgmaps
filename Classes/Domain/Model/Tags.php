@@ -45,7 +45,7 @@ class Tags extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * icon for map
 	 *
-	 * @var \string
+	 * @var string
 	 * @validate NotEmpty
 	 */
 	protected $mapIcon;
@@ -53,7 +53,7 @@ class Tags extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Returns the title
 	 *
-	 * @return \string $title
+	 * @return string $title
 	 */
 	public function getTitle() {
 		return $this->title;
@@ -62,7 +62,7 @@ class Tags extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Sets the title
 	 *
-	 * @param \string $title
+	 * @param string $title
 	 * @return void
 	 */
 	public function setTitle($title) {
@@ -72,7 +72,7 @@ class Tags extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Returns the mapIcon
 	 *
-	 * @return \string $mapIcon
+	 * @return string $mapIcon
 	 */
 	public function getMapIcon() {
 		return $this->mapIcon;
@@ -81,7 +81,7 @@ class Tags extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	/**
 	 * Sets the mapIcon
 	 *
-	 * @param \string $mapIcon
+	 * @param string $mapIcon
 	 * @return void
 	 */
 	public function setMapIcon($mapIcon) {

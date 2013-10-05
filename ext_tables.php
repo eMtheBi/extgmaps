@@ -5,8 +5,8 @@ if(!defined('TYPO3_MODE')) {
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
 	$_EXTKEY,
-	'Articlemap',
-	'article map'
+	'ContentMap',
+	'content map'
 );
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
@@ -74,7 +74,7 @@ $TCA['tx_extgmaps_domain_model_categories'] = array(
 	),
 );
 
-$addToPages = Array(
+$addToTca = Array(
 	'latitude' => array(
 		'exclude' => 0,
 		'label' => 'LLL:EXT:extgmaps/Resources/Private/Language/locallang_db.xlf:tx_extgmaps_domain_model_page.latitude',
@@ -176,11 +176,62 @@ $addToPages = Array(
 
 );
 
+$addToPages = array(
+	'image' => array(
+		'exclude' => 0,
+		'label' => 'LLL:EXT:extgmaps/Resources/Private/Language/locallang_db.xlf:tx_extgmaps_domain_model_tags.image',
+		'config' => array(
+			'maxitems' => 1,
+			'type' => 'inline',
+			'foreign_table' => 'sys_file_reference',
+			'foreign_field' => 'uid_foreign',
+			'foreign_sortby' => 'sorting_foreign',
+			'foreign_table_field' => 'tablenames',
+			'foreign_match_fields' => array(
+				'fieldname' => 'image'
+			),
+			'foreign_label' => 'uid_local',
+			'foreign_selector' => 'uid_local',
+			'foreign_selector_fieldTcaOverride' => array(
+				'config' => array(
+					'appearance' => array(
+						'elementBrowserType' => 'file',
+						'elementBrowserAllowed' => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
+					)
+				)
+			),
+		   'filter' => array(
+			   array(
+				   'userFunc' => 'TYPO3\\CMS\\Core\\Resource\\Filter\\FileExtensionFilter->filterInlineChildren',
+				   'parameters' => array(
+					   'allowedFileExtensions' => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
+					   'disallowedFileExtensions' => ''
+				   )
+			   )
+		   ),
+		),
+	),
+	'header' => array(
+		'exclude' => 0,
+		'label' => 'LLL:EXT:extgmaps/Resources/Private/Language/locallang_db.xlf:tx_extgmaps_domain_model_page.header',
+		'config' => array(
+			'type' => 'input',
+			'size' => 50,
+			'eval' => 'trim'
+		),
+	),
+);
+
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns("pages", $addToTca, 1);
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns("pages", $addToPages, 1);
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes("pages",
-	"--div--;GeoVerortung,map,latitude,longitude,tags,categories"
+	"--div--;GeoVerortung,map,latitude,longitude,tags,categories,header,image"
+//	,
+//	"--div--;Header,header"
+//	,
+//	"--div--;Image,image"
 );
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns("tt_content", $addToPages, 1);
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns("tt_content", $addToTca, 1);
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes("tt_content",
 	"--div--;GeoVerortung,map,latitude,longitude,tags,categories"
 );

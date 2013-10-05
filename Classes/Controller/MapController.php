@@ -5,7 +5,7 @@ namespace emthebi\Extgmaps\Controller;
  *  Copyright notice
  *
  *  (c) 2013 Markus Bloch <markus@emthebi.de>
- *  
+ *
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -52,29 +52,37 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 	 */
 	protected $contentRepository;
 
-	public function testAction() {
+	/**
+	 * Action for map which has to be placed on pages
+	 */
+	public function contentMapAction() {
+
+
+		$mapObjects = array();
 		$pagesWithGeoInformation = $this->pageRepository->findAllWithGeoData();
 		$contentElementsWithGeoInformation = $this->contentRepository->findAllWithGeoData($this->configurationManager->getContentObject()->data['pid']);
 		foreach ($pagesWithGeoInformation as $pageWithGeoInformation) {
 			/* @var \emthebi\Extgmaps\Domain\Model\Page  $pageWithGeoInformation */
-
-			// ------- DEBUG START -------
-			DebugUtility::debug(__FILE__ . ' - Line: ' . __LINE__,'Debug: Markus  04.10.13 22:16 ');
-			DebugUtility::debug($pageWithGeoInformation);
-			// ------- DEBUG END -------
+			$mapObjects[] = $pageWithGeoInformation;
 		}
-		foreach ($contentElementsWithGeoInformation as $contentElementWithGeoInformation) {
-			/* @var \emthebi\Extgmaps\Domain\Model\Content  $contentElementWithGeoInformation */
+		foreach($contentElementsWithGeoInformation as $contentElementWithGeoInformation) {
+			/* @var \emthebi\Extgmaps\Domain\Model\Content $contentElementWithGeoInformation */
+			$mapObjects[] = $contentElementWithGeoInformation;
 
-			// ------- DEBUG START -------
-			DebugUtility::debug(__FILE__ . ' - Line: ' . __LINE__,'Debug: Markus  04.10.13 22:16 ');
-			DebugUtility::debug($contentElementWithGeoInformation);
-			// ------- DEBUG END -------
+//			if($contentElementWithGeoInformation->getContentType() == 'textpic') {
+//				$fileRepository = $this->objectManager->get('TYPO3\\CMS\\Core\\Resource\\FileRepository');
+//				$fileObjects = $fileRepository->findByRelation('tt_content', 'image', $contentElementWithGeoInformation->getUid());
+//				if(is_array($fileObjects) && count($fileObjects) > 0) {
+//					foreach($fileObjects as $fileObject) {
+//						/* @var \TYPO3\CMS\Core\Resource\FileReference $fileObject */
+////						$contentElementWithGeoInformation->setImage($fileObject->getPublicUrl());
+//					}
+//				}
+//			}
 		}
-		die();
 
+		$this->view->assign('mapObjects',$mapObjects);
 	}
-
-
 }
+
 ?>
