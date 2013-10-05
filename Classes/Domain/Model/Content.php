@@ -78,11 +78,44 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	protected $tags;
 
 	/**
+	 * categories
+	 *
+	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\emthebi\Extgmaps\Domain\Model\Categories>
+	 */
+	protected $categories;
+
+	/**
 	 * contentType for content
 	 *
 	 * @var string
 	 */
 	protected $contentType;
+
+
+	/**
+	 * __construct
+	 *
+	 * @return Page
+	 */
+	public function __construct() {
+		//Do not remove the next line: It would break the functionality
+		$this->initStorageObjects();
+	}
+
+	/**
+	 * Initializes all ObjectStorage properties.
+	 *
+	 * @return void
+	 */
+	protected function initStorageObjects() {
+		/**
+		 * Do not modify this method!
+		 * It will be rewritten on each save in the extension builder
+		 * You may modify the constructor of this class instead
+		 */
+		$this->tags = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+		$this->categories = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+	}
 
 	/**
 	 * @param string $description
@@ -148,6 +181,40 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 */
 	public function setLongitude($longitude) {
 		$this->longitude = $longitude;
+	}
+
+	/**
+	 * Adds a Categories
+	 *
+	 * @param \emthebi\Extgmaps\Domain\Model\Categories $category
+	 * @return void
+	 */
+	public function addCategories(\emthebi\Extgmaps\Domain\Model\Categories $category) {
+		$this->tags->attach($category);
+	}
+
+	/**
+	 * Removes a Categories
+	 *
+	 * @param \emthebi\Extgmaps\Domain\Model\Categories $categoryToRemove The Categories to be removed
+	 * @return void
+	 */
+	public function removeCategories(\emthebi\Extgmaps\Domain\Model\Categories $categoryToRemove) {
+		$this->tags->detach($categoryToRemove);
+	}
+
+	/**
+	 * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\emthebi\Extgmaps\Domain\Model\Categories> $categories
+	 */
+	public function setCategories($categories) {
+		$this->categories = $categories;
+	}
+
+	/**
+	 * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage <\emthebi\Extgmaps\Domain\Model\Categories> $categories
+	 */
+	public function getCategories() {
+		return $this->categories;
 	}
 
 	/**

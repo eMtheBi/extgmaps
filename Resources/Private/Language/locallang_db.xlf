@@ -16,7 +16,10 @@
 			<trans-unit id="tx_extgmaps_domain_model_page.tags">
 				<source>Tags</source>
 			</trans-unit>
-			
+			<trans-unit id="tx_extgmaps_domain_model_page.categories">
+				<source>Categories</source>
+			</trans-unit>
+
 			<trans-unit id="pages.tx_extbase_type.Tx_Extgmaps_Page">
 				<source>extended goggle maps extension Page</source>
 			</trans-unit>
@@ -33,6 +36,9 @@
 			<trans-unit id="tx_extgmaps_domain_model_content.tags">
 				<source>Tags</source>
 			</trans-unit>
+			<trans-unit id="tx_extgmaps_domain_model_content.categories">
+				<source>Categories</source>
+			</trans-unit>
 			
 			<trans-unit id="tt_content.tx_extbase_type.Tx_Extgmaps_Content">
 				<source>extended goggle maps extension Content</source>
@@ -45,6 +51,16 @@
 				<source>Title</source>
 			</trans-unit>
 			<trans-unit id="tx_extgmaps_domain_model_tags.map_icon">
+				<source>Map Icon</source>
+			</trans-unit>
+
+			<trans-unit id="tx_extgmaps_domain_model_categories">
+				<source>Tags</source>
+			</trans-unit>
+			<trans-unit id="tx_extgmaps_domain_model_categories.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_extgmaps_domain_model_categories.map_icon">
 				<source>Map Icon</source>
 			</trans-unit>
 
