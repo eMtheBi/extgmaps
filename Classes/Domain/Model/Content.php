@@ -35,16 +35,26 @@ namespace emthebi\Extgmaps\Domain\Model;
  */
 class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 
+	/**
+	 * title for content
+	 *
+	 * @var string
+	 */
 	protected $title;
 
-	protected $bodyText;
-
 	/**
-	 * description for content
+	 * bodyText for content
 	 *
 	 * @var string
 	 */
 	protected $description;
+
+	/**
+	 * header for content
+	 *
+	 * @var string
+	 */
+	protected $header;
 
 	/**
 	 * latitude for content
@@ -61,11 +71,46 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	protected $longitude;
 
 	/**
-	 * tags
+	 * tags for content
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\emthebi\Extgmaps\Domain\Model\Tags>
 	 */
 	protected $tags;
+
+	/**
+	 * contentType for content
+	 *
+	 * @var string
+	 */
+	protected $contentType;
+
+	/**
+	 * @param string $description
+	 */
+	public function setDescription($description) {
+		$this->description = $description;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getDescription() {
+		return $this->description;
+	}
+
+	/**
+	 * @param string $title
+	 */
+	public function setTitle($title) {
+		$this->title = $title;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getTitle() {
+		return $this->title;
+	}
 
 	/**
 	 * Returns the latitude
@@ -142,6 +187,34 @@ class Content extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 */
 	public function setTags(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $tags) {
 		$this->tags = $tags;
+	}
+
+	/**
+	 * @param string $contentType
+	 */
+	public function setContentType($contentType) {
+		$this->contentType = $contentType;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getContentType() {
+		return $this->contentType;
+	}
+
+	/**
+	 * @param string $header
+	 */
+	public function setHeader($header) {
+		$this->header = $header;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getHeader() {
+		return $this->header;
 	}
 
 }

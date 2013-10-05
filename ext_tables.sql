@@ -3,8 +3,8 @@
 #
 CREATE TABLE pages (
 
-	latitude double(11,2) DEFAULT '0.00' NOT NULL,
-	longitude double(11,2) DEFAULT '0.00' NOT NULL,
+	latitude double DEFAULT '0' NOT NULL,
+	longitude double DEFAULT '0' NOT NULL,
 	tags varchar(255) DEFAULT '' NOT NULL,
 
 );
@@ -14,8 +14,8 @@ CREATE TABLE pages (
 #
 CREATE TABLE tt_content (
 
-	latitude double(11,2) DEFAULT '0.00' NOT NULL,
-	longitude double(11,2) DEFAULT '0.00' NOT NULL,
+	latitude double DEFAULT '0' NOT NULL,
+	longitude double DEFAULT '0' NOT NULL,
 	tags varchar(255) DEFAULT '' NOT NULL,
 
 );

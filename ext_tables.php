@@ -101,27 +101,27 @@ $addToPages = Array(
 		),
 	),
 
-//	'map' => Array(
-//		'exclude' => 0,
-//		'l10n_mode' => 'exclude',
-//		'label' => 'LLL:EXT:extgmaps/Resources/Private/Language/locallang_db.xlf:tx_extgmaps_domain_model_page.map',
-//		'config' => Array(
-//			'type' => 'user',
-//			'userFunc' => 'tx_extgmaps_map->displayMap'
-//		)
-//	),
+	'map' => Array(
+		'exclude' => 0,
+		'l10n_mode' => 'exclude',
+		'label' => 'LLL:EXT:extgmaps/Resources/Private/Language/locallang_db.xlf:tx_extgmaps_domain_model_page.map',
+		'config' => Array(
+			'type' => 'user',
+			'userFunc' => 'EXT:extgmaps/Hooks/TceMap.php:&TceMap->displayMap'
+		)
+	),
 
 );
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns("pages", $addToPages, 1);
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes("pages",
 	"--div--;Tags,tags," .
-	"--div--;GeoVerortung,latitude,longitude"
+	"--div--;GeoVerortung,map,latitude,longitude"
 );
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns("tt_content", $addToPages, 1);
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes("tt_content",
 	"--div--;Tags,tags," .
-	"--div--;GeoVerortung,latitude,longitude"
+	"--div--;GeoVerortung,map,latitude,longitude"
 );
 
 ?>

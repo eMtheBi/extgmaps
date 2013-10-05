@@ -18,7 +18,7 @@ config.tx_extbase{
                     #recordType = Tx_Extgmaps_Content
                     columns {
 						CType.mapOnProperty = contentType
-						bodytext.mapOnProperty = bodytext
+						bodytext.mapOnProperty = description
 					}
                 }
             }
