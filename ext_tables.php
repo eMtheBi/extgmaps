@@ -170,7 +170,7 @@ $addToTca = Array(
 		'label' => 'LLL:EXT:extgmaps/Resources/Private/Language/locallang_db.xlf:tx_extgmaps_domain_model_page.map',
 		'config' => Array(
 			'type' => 'user',
-			'userFunc' => 'EXT:extgmaps/Hooks/TceMap.php:&TceMap->displayMap'
+			'userFunc' => 'EXT:extgmaps/Classes/Services/TceMap.php:&TceMap->displayMap'
 		)
 	),
 
