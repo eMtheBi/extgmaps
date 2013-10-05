@@ -26,6 +26,7 @@ namespace emthebi\Extgmaps\Controller;
  ***************************************************************/
 use TYPO3\CMS\Core\Utility\DebugUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Exception;
 
 /**
  *
@@ -57,7 +58,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 	 */
 	public function initializeAction() {
 		if (empty($this->settings)) {
-			throw new \TYPO3\CMS\Extbase\Exception('please include staticFile / TS setup (1381006069)',1381006069);
+			throw new Exception('please include staticFile / TS setup (1381006069)',1381006069);
 		}
 	}
 
@@ -105,7 +106,7 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 			$gridSize = $this->settings['flexFormGridSize'];
 		} else {
 			if (!isset($this->settings['fallbackGridSize'])) {
-				throw new \TYPO3\CMS\Extbase\Exception('no fallback gridSize found (1381007299)',1381007299);
+				throw new Exception('no fallback gridSize found (1381007299)',1381007299);
 			}
 			$gridSize = $this->settings['fallbackGridSize'];
 		}

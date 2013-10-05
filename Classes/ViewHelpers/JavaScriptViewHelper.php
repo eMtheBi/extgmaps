@@ -25,6 +25,7 @@ namespace emthebi\extgmaps\ViewHelpers;
 	 *  This copyright notice MUST APPEAR in all copies of the script!
 	 ***************************************************************/
 
+use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 /**
  * Class JavaScriptViewHelper
  *
@@ -76,10 +77,10 @@ class JavaScriptViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractView
 				array($file)
 			)
 		);
-		if(file_exists(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath(
+		if(file_exists(ExtensionManagementUtility::extPath(
 			$this->controllerContext->getRequest()->getControllerExtensionKey(), $filePath))
 		) {
-			$file = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath(
+			$file = ExtensionManagementUtility::siteRelPath(
 					$this->controllerContext->getRequest()->getControllerExtensionKey()) . $filePath;
 			$pageRenderer = $GLOBALS['TSFE']->getPageRenderer();
 			/* @var  \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer */
