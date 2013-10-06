@@ -39,4 +39,44 @@ plugin.tx_extgmaps._CSS_DEFAULT_STYLE (
 )
 plugin.tx_extgmaps.settings {
 	fallbackGridSize = 10
+	tableMappings {
+		emthebi\Extgmaps\Domain\Model\Content = tt_content
+		emthebi\Extgmaps\Domain\Model\Page = pages
+	}
+
+	mapMarkerMappings {
+		default {
+			title = title
+			description = description
+			image = image
+			uid = uid
+			header = header
+			categories = categories
+			tags = tags
+			longitude = longitude
+			latitude = latitude
+		}
+		emthebi\Extgmaps\Domain\Model\Page {
+			title = title
+			description = description
+			image = image
+			uid = uid
+			header = header
+			categories = categories
+			tags = tags
+			longitude = longitude
+			latitude = latitude
+		}
+		emthebi\Extgmaps\Domain\Model\Content {
+			title = title
+			description = description
+			image = image
+			uid = uid
+			header = header
+			categories = categories
+			tags = tags
+			longitude = longitude
+			latitude = latitude
+		}
+	}
 }

@@ -5,8 +5,7 @@ namespace emthebi\Extgmaps\Domain\Model;
  *  Copyright notice
  *
  *  (c) 2013 Markus Bloch <markus@emthebi.de>
- *  Markus Bloch <markus@emthebi.de>
- *  
+ *
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is

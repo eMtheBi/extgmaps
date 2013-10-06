@@ -24,10 +24,16 @@ namespace emthebi\Extgmaps\Controller;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-use TYPO3\CMS\Core\Utility\DebugUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Exception;
-use \TYPO3\CMS\Extbase\Mvc\Controller\ActionController ;
+use \TYPO3\CMS\Core\Utility\DebugUtility;
+use \TYPO3\CMS\Core\Utility\GeneralUtility;
+use \TYPO3\CMS\Extbase\Exception;
+use \TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use emthebi\Extgmaps\Domain\Model\Page;
+use emthebi\Extgmaps\Domain\Model\Tags;
+use emthebi\Extgmaps\Domain\Model\Categories;
+use emthebi\Extgmaps\Domain\Model\Content;
+use emthebi\Extgmaps\Domain\Model\MapMarker;
+use \TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
 
 /**
  *
@@ -58,8 +64,8 @@ class MapController extends ActionController {
 	 * @throws \TYPO3\CMS\Extbase\Exception
 	 */
 	public function initializeAction() {
-		if (empty($this->settings)) {
-			throw new Exception('please include staticFile / TS setup (1381006069)',1381006069);
+		if(empty($this->settings)) {
+			throw new Exception('please include staticFile / TS setup (1381006069)', 1381006069);
 		}
 	}
 
@@ -68,48 +74,103 @@ class MapController extends ActionController {
 	 */
 	public function contentMapAction() {
 
-
 		$mapObjects = array();
 		$pagesWithGeoInformation = $this->pageRepository->findAllWithGeoData();
 		$contentElementsWithGeoInformation = $this->contentRepository->findAllWithGeoData($this->configurationManager->getContentObject()->data['pid']);
-		foreach ($pagesWithGeoInformation as $pageWithGeoInformation) {
-			/* @var \emthebi\Extgmaps\Domain\Model\Page  $pageWithGeoInformation */
-			$mapObjects[] = $pageWithGeoInformation;
+		foreach($pagesWithGeoInformation as $pageWithGeoInformation) {
+			/* @var Page $pageWithGeoInformation */
+			$mapObjects[] = $this->fillMapObject($pageWithGeoInformation);
 		}
 		foreach($contentElementsWithGeoInformation as $contentElementWithGeoInformation) {
-			/* @var \emthebi\Extgmaps\Domain\Model\Content $contentElementWithGeoInformation */
-			$mapObjects[] = $contentElementWithGeoInformation;
-
-//			if($contentElementWithGeoInformation->getContentType() == 'textpic') {
-//				$fileRepository = $this->objectManager->get('TYPO3\\CMS\\Core\\Resource\\FileRepository');
-//				$fileObjects = $fileRepository->findByRelation('tt_content', 'image', $contentElementWithGeoInformation->getUid());
-//				if(is_array($fileObjects) && count($fileObjects) > 0) {
-//					foreach($fileObjects as $fileObject) {
-//						/* @var \TYPO3\CMS\Core\Resource\FileReference $fileObject */
-////						$contentElementWithGeoInformation->setImage($fileObject->getPublicUrl());
-//					}
-//				}
-//			}
+			/* @var Content $contentElementWithGeoInformation */
+			$mapObjects[] = $this->fillMapObject($contentElementWithGeoInformation);
 		}
 		$gridSize = $this->getContentMapGridSize();
 		$mapType = $this->getGoogleMapType();
+		$mapObjectsAsJson = json_encode($mapObjects);
 
-		$this->view->assign('mapType',$mapType);
-		$this->view->assign('gridSize',$gridSize);
-		$this->view->assign('mapObjects',$mapObjects);
+		$this->view->assign('mapType', $mapType);
+		$this->view->assign('gridSize', $gridSize);
+		$this->view->assign('mapObjects', $mapObjects);
+		$this->view->assign('mapObjectsAsJson', $mapObjectsAsJson);
+	}
+
+	/**
+	 * get an Object an fill array with information which will be used from map marker
+	 *
+	 * use TypoScript mapping settings to read properties from given object
+	 *
+	 * @param $currentObject
+	 *
+	 * @return array
+	 */
+	protected function fillMapObject($currentObject) {
+		$useFAL = false;
+		$tableName = '';
+
+		// get table name to fetch data from FAL
+		if(isset($this->settings['tableMappings'][get_class($currentObject)])) {
+			$useFAL = true;
+			$tableName = $this->settings['tableMappings'][get_class($currentObject)];
+		}
+
+		// get mappings to read out properties
+		if(isset($this->settings['mapMarkerMappings'][get_class($currentObject)])) {
+			$mappings = $this->settings['mapMarkerMappings'][get_class($currentObject)];
+		} else {
+			$mappings = $this->settings['mapMarkerMappings']['default'];
+		}
+
+		$mapMarker = array();
+
+		// loop mapping an fetch properties
+		foreach ($mappings as  $ObjectProperty => $mappingTargetProperty) {
+			if ($currentObject instanceof AbstractDomainObject && $currentObject->_hasProperty($ObjectProperty)) {
+				$objectValue = '';
+				switch($ObjectProperty) {
+					case 'image':
+						if ($useFAL) {
+							$fileRepository = $this->objectManager->get('TYPO3\CMS\Core\Resource\FileRepository');
+							/* @var \TYPO3\CMS\Core\Resource\FileRepository $fileRepository*/
+							$fileObjects = $fileRepository->findByRelation($tableName, $ObjectProperty, $currentObject->getUid());
+
+							if(is_array($fileObjects) && count($fileObjects) > 0) {
+								$fileObject = $fileObjects[0];
+								/* @var \TYPO3\CMS\Core\Resource\FileReference $fileObject */
+								$objectValue = $fileObject->getPublicUrl();
+							}
+						}
+						break;
+					case 'tags':
+					case 'categories':
+						$tags = array();
+						foreach ($currentObject->_getProperty($ObjectProperty) as $tag){
+							/* @var Tags $tag */
+							$tags[] = $tag->getUid();
+						}
+						$objectValue = $tags;
+						break;
+					default:
+						$objectValue = $currentObject->_getProperty($ObjectProperty);
+				}
+				$mapMarker[$mappingTargetProperty] = $objectValue;
+			}
+		}
+		return $mapMarker;
 	}
 
 	/**
 	 * return gridSize
+	 *
 	 * @return int value of gridSize
 	 * @throws \TYPO3\CMS\Extbase\Exception
 	 */
 	protected function getContentMapGridSize() {
-		if (isset($this->settings['flexFormGridSize'])) {
+		if(isset($this->settings['flexFormGridSize'])) {
 			$gridSize = $this->settings['flexFormGridSize'];
 		} else {
-			if (!isset($this->settings['fallbackGridSize'])) {
-				throw new Exception('no fallback gridSize found (1381007299)',1381007299);
+			if(!isset($this->settings['fallbackGridSize'])) {
+				throw new Exception('no fallback gridSize found (1381007299)', 1381007299);
 			}
 			$gridSize = $this->settings['fallbackGridSize'];
 		}
@@ -120,12 +181,11 @@ class MapController extends ActionController {
 	protected function getGoogleMapType() {
 
 		$mapType = 'ROADMAP';
-		if (isset($this->settings['flexFormMapType'])) {
+		if(isset($this->settings['flexFormMapType'])) {
 			$mapType = $this->settings['flexFormMapType'];
 		}
 		return $mapType;
 	}
-
 }
 
 ?>

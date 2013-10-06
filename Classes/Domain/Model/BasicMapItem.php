@@ -1,4 +1,5 @@
 <?php
+namespace emthebi\Extgmaps\Domain\Model;
 /***************************************************************
  *  Copyright notice
  *
@@ -23,17 +24,14 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use \TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 /**
  *
  * @package extgmaps
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  *
  */
-namespace emthebi\Extgmaps\Domain\Model;
-
-
-
-class BasicMapItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
+class BasicMapItem extends AbstractEntity  {
 
 	/**
 	 * latitude
@@ -200,7 +198,7 @@ class BasicMapItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @return void
 	 */
 	public function addCategories(\emthebi\Extgmaps\Domain\Model\Categories $category) {
-		$this->tags->attach($category);
+		$this->categories->attach($category);
 	}
 
 	/**
@@ -210,7 +208,7 @@ class BasicMapItem extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @return void
 	 */
 	public function removeCategories(\emthebi\Extgmaps\Domain\Model\Categories $categoryToRemove) {
-		$this->tags->detach($categoryToRemove);
+		$this->categories->detach($categoryToRemove);
 	}
 
 	/**
