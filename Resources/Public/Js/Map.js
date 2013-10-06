@@ -47,6 +47,28 @@ var infoBoxOptions = {
 var listClusterMarkers = [];
 
 /**
+ *
+ * @param mapType
+ * @returns {*}
+ */
+function getMapType(mapType) {
+	switch (mapType) {
+		case 'SATELLITE':
+			mapType = google.maps.MapTypeId.SATELLITE;
+			break;
+		case 'HYBRID':
+			mapType = google.maps.MapTypeId.HYBRID;
+			break;
+		case 'TERRAIN':
+			mapType = google.maps.MapTypeId.TERRAIN;
+			break;
+		default :
+			mapType = google.maps.MapTypeId.ROADMAP;
+	}
+	return mapType;
+}
+
+/**
  * build the basic map over the result list
  */
 function buildMap() {
@@ -55,23 +77,11 @@ function buildMap() {
 		var myLatLng = new google.maps.LatLng(54.897997816965606, 8.372894287109375);
 
 		bounds = new google.maps.LatLngBounds();
-		switch (mapType) {
-			case 'SATELLITE':
-				mapType = google.maps.MapTypeId.SATELLITE;
-				break;
-			case 'HYBRID':
-				mapType = google.maps.MapTypeId.HYBRID;
-				break;
-			case 'TERRAIN':
-				mapType = google.maps.MapTypeId.TERRAIN;
-				break;
-			default :
-				mapType = google.maps.MapTypeId.ROADMAP;
-		}
+
 		var mapOptions = {
 			zoom: 8,
 			center: myLatLng,
-			mapTypeId: mapType
+			mapTypeId: getMapType(mapType)
 		};
 
 		extGoogleMap = new google.maps.Map(document.getElementById('js_extGMaps'), mapOptions);
