@@ -41,7 +41,7 @@ var infoBoxOptions = {
 	boxClass: 'js_extGMapsInfobox extGMapsInfobox',
 	closeBoxMargin: "0px",
 	closeBoxURL: "/typo3conf/ext/extgmaps/Resources/Public/Images/MapCluster/close.png",
-//	infoBoxClearance: new google.maps.Size(300, 400),
+	infoBoxClearance: new google.maps.Size(50, 50),
 	isHidden: false,
 	pane: "floatPane",
 	enableEventPropagation: false
