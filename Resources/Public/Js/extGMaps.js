@@ -3,7 +3,6 @@ var extGoogleMapLoaded = false;
 var infoBox = null;
 var extGoogleMap;
 var bounds;
-var mapData;
 var selCats = [];
 var listClusterMarkers = [];
 
@@ -37,12 +36,12 @@ var extGoogleMapStyles = [
 var infoBoxOptions = {
 	disableAutoPan: false,
 	maxWidth: 0,
-	pixelOffset: new google.maps.Size(0, 0),
+//	pixelOffset: new google.maps.Size(0, 0),
 	zIndex: null,
 	boxClass: 'js_extGMapsInfobox extGMapsInfobox',
 	closeBoxMargin: "0px",
 	closeBoxURL: "/typo3conf/ext/extgmaps/Resources/Public/Images/MapCluster/close.png",
-//	infoBoxClearance: new google.maps.Size(300, 320),
+//	infoBoxClearance: new google.maps.Size(300, 400),
 	isHidden: false,
 	pane: "floatPane",
 	enableEventPropagation: false
@@ -105,7 +104,7 @@ function buildMap() {
 
 		google.maps.event.addListenerOnce(extGoogleMap, 'idle', function() {
 			setMarker();
-			filterMarker();
+//			filterMarker();
 		});
 
 		if(listMarkerClusterer) {
@@ -121,12 +120,15 @@ jQuery(document).ready(function() {
 });
 
 function getMapMarker(id,objElement) {
-	var markerLatLng = new google.maps.LatLng(objElement[3], objElement[4]);
+	var markerLatLng = new google.maps.LatLng(objElement.latitude, objElement.longitude);
 	bounds.extend(markerLatLng);
 	var picto = '/typo3conf/ext/extgmaps/Resources/Public/Images/MapCluster/bubble-green-small.png';
 	var image = new google.maps.MarkerImage(picto, null, null, null, new google.maps.Size(25, 25));
-	var title = objElement[0] + ' ' + objElement[5] + ' ' + objElement[6];
-	mapData[id].marker = new google.maps.Marker({
+	var title = (objElement.title) ? objElement.title : '' ;
+	title += (objElement.header) ? objElement.header : '' ;
+	title += (objElement.description) ? objElement.description : '' ;
+
+	mapDataJson[id].marker = new google.maps.Marker({
 		position: markerLatLng,
 		title: title,
 		icon: image
@@ -140,7 +142,7 @@ function getMapMarker(id,objElement) {
 }
 
 function addListenerForMarker(markerData) {
-	google.maps.event.addListener(mapData[markerData.id].marker, 'click', function() {
+	google.maps.event.addListener(mapDataJson[markerData.id].marker, 'click', function() {
 		extGoogleMap.setCenter(markerData.markerLatLng);
 		infoBox.open(extGoogleMap, this);
 		infoBox.setContent(markerData.title);
@@ -167,11 +169,11 @@ function handleClustering() {
 function setMarker() {
 	if(extGoogleMapLoaded == true) {
 		listClusterMarkers = [];
-		jQuery.each(mapData, function(id, objElement) {
+		jQuery.each(mapDataJson, function(id, objElement) {
 
 			var markerData = getMapMarker(id,objElement);
 
-			listClusterMarkers.push(mapData[id].marker);
+			listClusterMarkers.push(mapDataJson[id].marker);
 
 			addListenerForMarker(markerData);
 
@@ -193,14 +195,14 @@ function filterMarker() {
 	currentBounds = extGoogleMap.getBounds();
 	if(extGoogleMapLoaded == true) {
 		listClusterMarkers = [];
-		jQuery.each(mapData, function(id, objElement) {
+		jQuery.each(mapDataJson, function(id, objElement) {
 			var markerData = false;
-			mapData[id].marker.setMap(null);
-			if(currentBounds.contains(mapData[id].marker.position) == true) {
+			mapDataJson[id].marker.setMap(null);
+			if(currentBounds.contains(mapDataJson[id].marker.position) == true) {
 				markerData = getMapMarker(id,objElement);
 			}
-			if(arrayIntersect(selCats, mapData[id][7]).length > 0) { //selCats.length == 0 ||
-				listClusterMarkers.push(mapData[id].marker);
+			if(arrayIntersect(selCats, mapDataJson[id][7]).length > 0) { //selCats.length == 0 ||
+				listClusterMarkers.push(mapDataJson[id].marker);
 			}
 			if (markerData) {
 

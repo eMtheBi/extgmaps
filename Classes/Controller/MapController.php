@@ -91,7 +91,6 @@ class MapController extends ActionController {
 
 		$this->view->assign('mapType', $mapType);
 		$this->view->assign('gridSize', $gridSize);
-		$this->view->assign('mapObjects', $mapObjects);
 		$this->view->assign('mapObjectsAsJson', $mapObjectsAsJson);
 	}
 
@@ -152,6 +151,9 @@ class MapController extends ActionController {
 						break;
 					default:
 						$objectValue = $currentObject->_getProperty($ObjectProperty);
+				}
+				if (empty($objectValue)) {
+					$objectValue = null;
 				}
 				$mapMarker[$mappingTargetProperty] = $objectValue;
 			}

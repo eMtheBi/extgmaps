@@ -4,6 +4,7 @@
 <script type="text/javascript">
 //    var jQuery = jQuery.noConflict();
     var mapData = [];
+    var mapDataJson = <f:format.htmlentitiesDecode>{mapObjectsAsJson}</f:format.htmlentitiesDecode>;
 </script>
 <ext:javaScript footer="1">
     var gridSize = '{gridSize}';
@@ -30,39 +31,21 @@
 <ext:javaScript src="markerclusterer" footer="1" />
 <ext:javaScript src="extGMaps" footer="1" />
 <ext:javaScript src="tree.jquery" footer="1" />
-<f:for each="{mapObjects}" as="mapObject">
-    <div>{mapObject.title}</div>
-    <script>
-        var title = '{mapObject.title}';
-        var image = '{mapObject.image.publicUrl}';
-        var imageTitle = '{mapObject.image.title}';
-        var latitude = '{mapObject.latitude}';
-        var longitude = '{mapObject.longitude}';
-        var header = '{mapObject.header}';
-        var uid = '{mapObject.uid}';
 
-        mapData.push([title, image, imageTitle, latitude, longitude, header, uid]);
-    </script>
-    <ext:javaScript>
-        var test123 = '123';
-    </ext:javaScript>
-    <ext:css>
-        .extGMapsInfobox {
-        height: 200px;
-        }
-    </ext:css>
-    <ext:css src="ContentMap" />
-    <ext:css src="jqtree" />
+<ext:javaScript>
+    var test123 = '123';
+</ext:javaScript>
 
-    <f:comment>
-        <div>
-            <f:image src="{mapObject.image.uid}" alt="{mapObject.image.title}" width="150" height="100" treatIdAsReference="1" />
-        </div>
-    </f:comment>
+<ext:css>
+    .extGMapsInfobox {
+    height: 200px;
+    }
+</ext:css>
 
-</f:for>
+<ext:css src="ContentMap" />
+<ext:css src="jqtree" />
+
 <script>
-    console.log(mapData);
     jQuery(function() {
         jQuery('#tree1').tree({
             data: data
