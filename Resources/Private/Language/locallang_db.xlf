@@ -71,6 +71,9 @@
 			<trans-unit id="contentMapFlexForm.gridSize">
 				<source>Cluster gridSize</source>
 			</trans-unit>
+			<trans-unit id="contentMapFlexForm.mapType">
+				<source>google map type </source>
+			</trans-unit>
 
 		</body>
 	</file>

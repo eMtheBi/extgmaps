@@ -26,6 +26,7 @@ namespace emthebi\extgmaps\ViewHelpers;
 	 ***************************************************************/
 
 use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * Class CssViewHelper
@@ -38,7 +39,7 @@ use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
  *
  * @package emthebi\extgmaps\ViewHelpers
  */
-class CssViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
+class CssViewHelper extends AbstractViewHelper {
 
 	/**
 	 * Add Css files

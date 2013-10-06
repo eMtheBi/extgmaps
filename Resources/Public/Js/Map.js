@@ -55,11 +55,23 @@ function buildMap() {
 		var myLatLng = new google.maps.LatLng(54.897997816965606, 8.372894287109375);
 
 		bounds = new google.maps.LatLngBounds();
-
+		switch (mapType) {
+			case 'SATELLITE':
+				mapType = google.maps.MapTypeId.SATELLITE;
+				break;
+			case 'HYBRID':
+				mapType = google.maps.MapTypeId.HYBRID;
+				break;
+			case 'TERRAIN':
+				mapType = google.maps.MapTypeId.TERRAIN;
+				break;
+			default :
+				mapType = google.maps.MapTypeId.ROADMAP;
+		}
 		var mapOptions = {
 			zoom: 8,
 			center: myLatLng,
-			mapTypeId: google.maps.MapTypeId.ROADMAP
+			mapTypeId: mapType
 		};
 
 		extGoogleMap = new google.maps.Map(document.getElementById('js_extGMaps'), mapOptions);

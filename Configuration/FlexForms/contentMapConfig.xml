@@ -19,6 +19,33 @@
 							</config>
                         </TCEforms>
                     </settings.flexFormGridSize>
+					<settings.flexFormMapType>
+						<TCEforms>
+							<label>LLL:EXT:extgmaps/Resources/Private/Language/locallang_db.xlf:contentMapFlexForm.mapType</label>
+							<onChange>reload</onChange>
+							<config>
+								<type>select</type>
+								<items type="array">
+									<numIndex index="0" type="array">
+										<numIndex index="0">ROADMAP</numIndex>
+										<numIndex index="1">ROADMAP</numIndex>
+									</numIndex>
+									<numIndex index="1" type="array">
+										<numIndex index="0">TERRAIN</numIndex>
+										<numIndex index="1">TERRAIN</numIndex>
+									</numIndex>
+									<numIndex index="2" type="array">
+										<numIndex index="0">HYBRID</numIndex>
+										<numIndex index="1">HYBRID</numIndex>
+									</numIndex>
+									<numIndex index="3" type="array">
+										<numIndex index="0">SATELLITE</numIndex>
+										<numIndex index="1">SATELLITE</numIndex>
+									</numIndex>
+								</items>
+							</config>
+						</TCEforms>
+					</settings.flexFormMapType>
 				</el>
 			</ROOT>
 		</sDEF>

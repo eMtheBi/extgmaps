@@ -1,5 +1,4 @@
 {namespace ext=emthebi\extgmaps\ViewHelpers}
-
 <f:layout name="Default" />
 <f:section name="main">
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
@@ -10,6 +9,7 @@
     </script>
     <ext:javaScript footer="1">
         var gridSize = '{gridSize}';
+        var mapType = '{mapType}';
     </ext:javaScript>
     <ext:javaScript src="infobox" footer="1" />
     <ext:javaScript src="markerclusterer" footer="1" />

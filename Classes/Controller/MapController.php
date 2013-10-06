@@ -27,6 +27,7 @@ namespace emthebi\Extgmaps\Controller;
 use TYPO3\CMS\Core\Utility\DebugUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Exception;
+use \TYPO3\CMS\Extbase\Mvc\Controller\ActionController ;
 
 /**
  *
@@ -35,7 +36,7 @@ use TYPO3\CMS\Extbase\Exception;
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  *
  */
-class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
+class MapController extends ActionController {
 
 	/**
 	 * pageRepository
@@ -91,7 +92,9 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 //			}
 		}
 		$gridSize = $this->getContentMapGridSize();
+		$mapType = $this->getGoogleMapType();
 
+		$this->view->assign('mapType',$mapType);
 		$this->view->assign('gridSize',$gridSize);
 		$this->view->assign('mapObjects',$mapObjects);
 	}
@@ -112,6 +115,15 @@ class MapController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 		}
 
 		return $gridSize;
+	}
+
+	protected function getGoogleMapType() {
+
+		$mapType = 'ROADMAP';
+		if (isset($this->settings['flexFormMapType'])) {
+			$mapType = $this->settings['flexFormMapType'];
+		}
+		return $mapType;
 	}
 
 }

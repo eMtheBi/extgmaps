@@ -26,6 +26,7 @@ namespace emthebi\extgmaps\ViewHelpers;
 	 ***************************************************************/
 
 use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 /**
  * Class JavaScriptViewHelper
  *
@@ -37,7 +38,7 @@ use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
  *
  * @package emthebi\extgmaps\ViewHelpers
  */
-class JavaScriptViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
+class JavaScriptViewHelper extends AbstractViewHelper {
 
 	/**
 	 * Add javascript files
