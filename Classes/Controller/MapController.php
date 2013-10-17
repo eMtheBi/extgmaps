@@ -113,11 +113,6 @@ class MapController extends ActionController {
 		$allowedIds['categories'] =  $this->getAllowedIdsFromFlexForm($this->settings['flexFormCategories']);
 		$allowedIds['tags'] = $this->getAllowedIdsFromFlexForm($this->settings['flexFormTags']);
 
-		// ------- DEBUG START -------
-		DebugUtility::debug(__FILE__ . ' - Line: ' . __LINE__,'Debug: Markus B.  11.10.13 22:51 ');
-		DebugUtility::debug($allowedIds);
-
-		// ------- DEBUG END -------
 		foreach($pagesWithGeoInformation as $pageWithGeoInformation) {
 			/* @var Page $pageWithGeoInformation */
 			$mapObjects[] = $this->fillMapObject($pageWithGeoInformation, $allowedIds);
@@ -156,12 +151,10 @@ class MapController extends ActionController {
 				break;
 		}
 
+		$treeAsJson = null;
+
 		/* @var TreeItem $treeItem */
 		$treeAsArray = $this->getTreeChildren($treeItem);
-		// ------- DEBUG START -------
-		DebugUtility::debug(__FILE__ . ' - Line: ' . __LINE__,'Debug: Markus B.  12.10.13 23:27 ');
-		DebugUtility::debug($treeAsArray);
-		// ------- DEBUG END -------
 		$treeAsJson = json_encode($treeAsArray);
 
 		return $treeAsJson;
@@ -170,22 +163,29 @@ class MapController extends ActionController {
 	/**
 	 * helper function to get recursive all children items
 	 * @param TreeItem $tree
+	 * @param int      $deep
 	 *
 	 * @return array
 	 */
-	protected function getTreeChildren (TreeItem $tree) {
+	protected function getTreeChildren (TreeItem $tree,$deep = 0) {
 		$properties = $tree->_getProperties();
 		$children = array();
-		foreach($properties['children'] as $treeChild) {
-			/* @var TreeItem $treeChild */
-			$childProperties = $this->getTreeChildren($treeChild);
-			$children[] = $childProperties;
-
+		if ($deep == 0) {
+			// only on first call
+			foreach($properties['children'] as $treeChild) {
+				/* @var TreeItem $treeChild */
+				$childProperties = $this->getTreeChildren($treeChild);
+				$children[] = $childProperties;
+			}
 		}
+
+		$deep++ ;
+
 		if (empty($children) && array_key_exists($properties['label'],$this->thirdLevelTreeItems)) {
 			$itemArray = $this->thirdLevelTreeItems[$properties['label']];
 			foreach($itemArray as $treeItem) {
-				$children[] = $this->getTreeChildren($treeItem);
+				if ($deep < 2)
+				$children[] = $this->getTreeChildren($treeItem, $deep);
 			}
 
 		}
@@ -256,10 +256,6 @@ class MapController extends ActionController {
 		}
 
 		$itemTitle = LocalizationUtility::translate($mappings['type'], $this->request->getControllerExtensionKey());
-		// ------- DEBUG START -------
-		DebugUtility::debug(__FILE__ . ' - Line: ' . __LINE__,'Debug: Markus B.  13.10.13 00:26 ');
-		DebugUtility::debug($itemTitle);
-		// ------- DEBUG END -------
 		$treeChildOfType = $this->getTreeItems($itemTitle);
 		$treeChild = null;
 
@@ -308,10 +304,6 @@ class MapController extends ActionController {
 										$this->addChildToTagsTree($tagOrCategory->getUid(),$treeChild);
 										break;
 									case 'categories':
-										// ------- DEBUG START -------
-										DebugUtility::debug(__FILE__ . ' - Line: ' . __LINE__,'Debug: Markus B.  13.10.13 00:49 ');
-										DebugUtility::debug($treeChild,$itemTitle);
-										// ------- DEBUG END -------
 										$this->addChildToCategoriesTree($tagOrCategory->getUid(),$treeChild);
 										break;
 								}
