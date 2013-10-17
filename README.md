@@ -1,4 +1,4 @@
 extgmaps
 ========
 
-Maps extension for TYPO3 6.1
+google maps extension for TYPO3 6.1
