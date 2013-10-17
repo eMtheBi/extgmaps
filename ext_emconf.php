@@ -12,7 +12,7 @@
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'extended goggle maps extension',
-	'description' => '',
+	'description' => 'a extended goggle maps extension',
 	'category' => 'plugin',
 	'author' => 'Markus Bloch',
 	'author_email' => 'markus@emthebi.de',
