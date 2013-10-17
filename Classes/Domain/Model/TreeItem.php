@@ -58,32 +58,36 @@ class TreeItem {
 	 * @param TreeItem $child
 	 */
 	public function addChildren($uid, TreeItem $child, $updateChildren = true){
-
+		$start = round(microtime(true),4);
 		if (!isset($this->children[$uid])) {
 			$this->children[$uid] = $child;
 		} else {
+
 			print_r("<p>exists</p>");
 			// to slow, to much memory usage
-//			if ($updateChildren) {
-//
-//				$childTemp = $this->children[$uid];
-//				/* @var TreeItem $childTemp */
-//				$newChildrenData = $child->getChildren();
-//				if (!empty($newChildrenData)) {
-//					foreach ($newChildrenData as $newChild){
-//						/* @var TreeItem $newChild */
-//						$childId = $newChild->getId();
-//						if (empty($childId)) {
-//							$childId = $newChild->getLabel();
-//						}
-//						if (empty($childId)) {
-//							continue;
-//						}
-//						$childTemp->addChildren($childId,$newChild,false);
-//					}
-//				}
-//			}
+			if ($updateChildren) {
+
+				$childTemp = $this->children[$uid];
+				/* @var TreeItem $childTemp */
+				$newChildrenData = $child->getChildren();
+				if (!empty($newChildrenData)) {
+					foreach ($newChildrenData as $newChild){
+						/* @var TreeItem $newChild */
+						$childId = $newChild->getId();
+						if (empty($childId)) {
+							$childId = $newChild->getLabel();
+						}
+						if (empty($childId)) {
+							continue;
+						}
+						$childTemp->addChildren($childId,$newChild,false);
+					}
+				}
+			}
+
 		}
+			$end = round(microtime(true),4) - $start;
+			print_r("<p>$end</p>");
 	}
 
 	public function addChild(TreeItem $parent, TreeItem $child) {
