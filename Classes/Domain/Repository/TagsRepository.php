@@ -1,5 +1,5 @@
 <?php
-namespace emthebi\Extgmaps\Domain\Model;
+namespace emthebi\Extgmaps\Domain\Repository;
 
 /***************************************************************
  *  Copyright notice
@@ -32,7 +32,7 @@ namespace emthebi\Extgmaps\Domain\Model;
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  *
  */
-class Tags extends BasicTreeModel {
+class TagsRepository extends ExtensionRepository {
 
 }
 ?>

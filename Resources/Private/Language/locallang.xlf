@@ -39,7 +39,26 @@
 			<trans-unit id="tx_extgmaps_domain_model_tags.map_icon">
 				<source>icon for map</source>
 			</trans-unit>
-			
+
+
+			<trans-unit id="page">
+				<source>Seite</source>
+			</trans-unit>
+			<trans-unit id="content">
+				<source>Inhalt</source>
+			</trans-unit>
+			<trans-unit id="mixed">
+				<source>verschiedenes</source>
+			</trans-unit>
+
+
+			<trans-unit id="categoriesTree">
+				<source>Categories...</source>
+			</trans-unit>
+			<trans-unit id="tagsTree">
+				<source>Tags...</source>
+			</trans-unit>
+
 		</body>
 	</file>
 </xliff>

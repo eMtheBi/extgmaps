@@ -25,6 +25,8 @@ namespace emthebi\Extgmaps\Domain\Model;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use \TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+
 /**
  *
  *
@@ -32,7 +34,61 @@ namespace emthebi\Extgmaps\Domain\Model;
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  *
  */
-class Tags extends BasicTreeModel {
+class BasicTreeModel extends AbstractEntity {
+
+	/**
+	 * title
+	 *
+	 * @var \string
+	 * @validate NotEmpty
+	 */
+	protected $title;
+
+	/**
+	 * icon for map
+	 *
+	 * @var string
+	 * @validate NotEmpty
+	 */
+	protected $mapIcon;
+
+	/**
+	 * Returns the title
+	 *
+	 * @return string $title
+	 */
+	public function getTitle() {
+		return $this->title;
+	}
+
+	/**
+	 * Sets the title
+	 *
+	 * @param string $title
+	 * @return void
+	 */
+	public function setTitle($title) {
+		$this->title = $title;
+	}
+
+	/**
+	 * Returns the mapIcon
+	 *
+	 * @return string $mapIcon
+	 */
+	public function getMapIcon() {
+		return $this->mapIcon;
+	}
+
+	/**
+	 * Sets the mapIcon
+	 *
+	 * @param string $mapIcon
+	 * @return void
+	 */
+	public function setMapIcon($mapIcon) {
+		$this->mapIcon = $mapIcon;
+	}
 
 }
 ?>

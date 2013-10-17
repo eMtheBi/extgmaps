@@ -29,11 +29,11 @@ use \TYPO3\CMS\Core\Utility\GeneralUtility;
 use \TYPO3\CMS\Extbase\Exception;
 use \TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use emthebi\Extgmaps\Domain\Model\Page;
-use emthebi\Extgmaps\Domain\Model\Tags;
-use emthebi\Extgmaps\Domain\Model\Categories;
+use emthebi\Extgmaps\Domain\Model\BasicTreeModel;
 use emthebi\Extgmaps\Domain\Model\Content;
-use emthebi\Extgmaps\Domain\Model\MapMarker;
+use emthebi\Extgmaps\Domain\Model\TreeItem;
 use \TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
+use \TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  *
@@ -61,12 +61,44 @@ class MapController extends ActionController {
 	protected $contentRepository;
 
 	/**
+	 * pageRepository
+	 *
+	 * @var \emthebi\Extgmaps\Domain\Repository\CategoriesRepository
+	 * @inject
+	 */
+	protected $categoriesRepository;
+
+	/**
+	 * pageRepository
+	 *
+	 * @var \emthebi\Extgmaps\Domain\Repository\TagsRepository
+	 * @inject
+	 */
+	protected $tagsRepository;
+
+	/**
+	 * @var TreeItem
+	 */
+	protected $tagsTree;
+
+	/**
+	 * @var array
+	 */
+	protected $thirdLevelTreeItems = array();
+
+	/**
+	 * @var TreeItem
+	 */
+	protected $categoriesTree;
+
+	/**
 	 * @throws \TYPO3\CMS\Extbase\Exception
 	 */
 	public function initializeAction() {
 		if(empty($this->settings)) {
 			throw new Exception('please include staticFile / TS setup (1381006069)', 1381006069);
 		}
+		$this->initializeTree();
 	}
 
 	/**
@@ -75,23 +107,117 @@ class MapController extends ActionController {
 	public function contentMapAction() {
 
 		$mapObjects = array();
-		$pagesWithGeoInformation = $this->pageRepository->findAllWithGeoData();
+		$pagesWithGeoInformation = $this->pageRepository->findAllWithGeoData(null, $this->configurationManager->getContentObject()->data['pid']);
 		$contentElementsWithGeoInformation = $this->contentRepository->findAllWithGeoData($this->configurationManager->getContentObject()->data['pid']);
+		$allowedIds = array();
+		$allowedIds['categories'] =  $this->getAllowedIdsFromFlexForm($this->settings['flexFormCategories']);
+		$allowedIds['tags'] = $this->getAllowedIdsFromFlexForm($this->settings['flexFormTags']);
+
+		// ------- DEBUG START -------
+		DebugUtility::debug(__FILE__ . ' - Line: ' . __LINE__,'Debug: Markus B.  11.10.13 22:51 ');
+		DebugUtility::debug($allowedIds);
+
+		// ------- DEBUG END -------
 		foreach($pagesWithGeoInformation as $pageWithGeoInformation) {
 			/* @var Page $pageWithGeoInformation */
-			$mapObjects[] = $this->fillMapObject($pageWithGeoInformation);
+			$mapObjects[] = $this->fillMapObject($pageWithGeoInformation, $allowedIds);
 		}
 		foreach($contentElementsWithGeoInformation as $contentElementWithGeoInformation) {
 			/* @var Content $contentElementWithGeoInformation */
-			$mapObjects[] = $this->fillMapObject($contentElementWithGeoInformation);
+			$mapObjects[] = $this->fillMapObject($contentElementWithGeoInformation, $allowedIds);
 		}
+
 		$gridSize = $this->getContentMapGridSize();
 		$mapType = $this->getGoogleMapType();
 		$mapObjectsAsJson = json_encode($mapObjects);
 
+		$tagsTree = $this->getTreeAsJson('tags');
+		$categoriesTree = $this->getTreeAsJson('categories');
+
 		$this->view->assign('mapType', $mapType);
+		$this->view->assign('categoriesTree', $categoriesTree);
 		$this->view->assign('gridSize', $gridSize);
 		$this->view->assign('mapObjectsAsJson', $mapObjectsAsJson);
+	}
+
+	/**
+	 * @param string $type
+	 *
+	 * @return string
+	 */
+	protected function getTreeAsJson($type){
+		$treeItem = null;
+		switch ($type) {
+			case 'tags':
+				$treeItem = $this->getTagsTree();
+				break;
+			case 'categories':
+				$treeItem = $this->getCategoriesTree();
+				break;
+		}
+
+		/* @var TreeItem $treeItem */
+		$treeAsArray = $this->getTreeChildren($treeItem);
+		// ------- DEBUG START -------
+		DebugUtility::debug(__FILE__ . ' - Line: ' . __LINE__,'Debug: Markus B.  12.10.13 23:27 ');
+		DebugUtility::debug($treeAsArray);
+		// ------- DEBUG END -------
+		$treeAsJson = json_encode($treeAsArray);
+
+		return $treeAsJson;
+	}
+
+	/**
+	 * helper function to get recursive all children items
+	 * @param TreeItem $tree
+	 *
+	 * @return array
+	 */
+	protected function getTreeChildren (TreeItem $tree) {
+		$properties = $tree->_getProperties();
+		$children = array();
+		foreach($properties['children'] as $treeChild) {
+			/* @var TreeItem $treeChild */
+			$childProperties = $this->getTreeChildren($treeChild);
+			$children[] = $childProperties;
+
+		}
+		if (empty($children) && array_key_exists($properties['label'],$this->thirdLevelTreeItems)) {
+			$itemArray = $this->thirdLevelTreeItems[$properties['label']];
+			foreach($itemArray as $treeItem) {
+				$children[] = $this->getTreeChildren($treeItem);
+			}
+
+		}
+		$properties['children'] = $children;
+		return $properties;
+
+	}
+
+	/**
+	 * create tree root elements
+	 */
+	protected function initializeTree() {
+
+		$itemTitle = LocalizationUtility::translate('tagsTree', $this->request->getControllerExtensionKey());
+		$tagsTree = $this->getTreeItems($itemTitle);
+		$this->setTagsTree($tagsTree);
+
+		$itemTitle = LocalizationUtility::translate('categoriesTree', $this->request->getControllerExtensionKey());
+		$categoriesTree = $this->getTreeItems($itemTitle);
+		$this->setCategoryTree($categoriesTree);
+
+	}
+
+	/**
+	 * @param $type
+	 * @param $flexFormData
+	 *
+	 * @return array
+	 */
+	protected function getAllowedIdsFromFlexForm($flexFormData) {
+		$ids = explode(',', $flexFormData);
+		return $ids;
 	}
 
 	/**
@@ -100,10 +226,12 @@ class MapController extends ActionController {
 	 * use TypoScript mapping settings to read properties from given object
 	 *
 	 * @param $currentObject
+	 * @Param array $allowedIds
 	 *
 	 * @return array
+	 * @throws \TYPO3\CMS\Extbase\Exception
 	 */
-	protected function fillMapObject($currentObject) {
+	protected function fillMapObject($currentObject, $allowedIds) {
 		$useFAL = false;
 		$tableName = '';
 
@@ -122,16 +250,29 @@ class MapController extends ActionController {
 
 		$mapMarker = array();
 
+		if (!isset($mappings['type']) || empty($mappings['type'])) {
+			//@todo insert TS
+			throw new Exception('no mapping type set',123);
+		}
+
+		$itemTitle = LocalizationUtility::translate($mappings['type'], $this->request->getControllerExtensionKey());
+		// ------- DEBUG START -------
+		DebugUtility::debug(__FILE__ . ' - Line: ' . __LINE__,'Debug: Markus B.  13.10.13 00:26 ');
+		DebugUtility::debug($itemTitle);
+		// ------- DEBUG END -------
+		$treeChildOfType = $this->getTreeItems($itemTitle);
+		$treeChild = null;
+
 		// loop mapping an fetch properties
-		foreach ($mappings as  $ObjectProperty => $mappingTargetProperty) {
-			if ($currentObject instanceof AbstractDomainObject && $currentObject->_hasProperty($ObjectProperty)) {
+		foreach($mappings as $mappingTargetProperty => $objectProperty) {
+			if($currentObject instanceof AbstractDomainObject && $currentObject->_hasProperty($objectProperty)) {
 				$objectValue = '';
-				switch($ObjectProperty) {
+				switch($mappingTargetProperty) {
 					case 'image':
-						if ($useFAL) {
+						if($useFAL) {
 							$fileRepository = $this->objectManager->get('TYPO3\CMS\Core\Resource\FileRepository');
-							/* @var \TYPO3\CMS\Core\Resource\FileRepository $fileRepository*/
-							$fileObjects = $fileRepository->findByRelation($tableName, $ObjectProperty, $currentObject->getUid());
+							/* @var \TYPO3\CMS\Core\Resource\FileRepository $fileRepository */
+							$fileObjects = $fileRepository->findByRelation($tableName, $objectProperty, $currentObject->getUid());
 
 							if(is_array($fileObjects) && count($fileObjects) > 0) {
 								$fileObject = $fileObjects[0];
@@ -142,23 +283,72 @@ class MapController extends ActionController {
 						break;
 					case 'tags':
 					case 'categories':
-						$tags = array();
-						foreach ($currentObject->_getProperty($ObjectProperty) as $tag){
-							/* @var Tags $tag */
-							$tags[] = $tag->getUid();
-						}
-						$objectValue = $tags;
+						$items = array();
+
+							foreach($currentObject->_getProperty($objectProperty) as $tagOrCategory) {
+								/* @var BasicTreeModel $tagOrCategory */
+
+								// if tags or category not in array, skip entry
+								if (!in_array($tagOrCategory->getUid(), $allowedIds[$mappingTargetProperty]) && count($allowedIds[$mappingTargetProperty]) > 0) {
+									continue;
+								}
+								$treeChild = $this->getTreeItems($tagOrCategory->getTitle(),$tagOrCategory->getMapIcon(),$tagOrCategory->getUid());
+
+								if ($this->settings['treeThirdLevel'] == $mappingTargetProperty &&
+									!isset($this->thirdLevelTreeItems[$itemTitle][$tagOrCategory->getUid()])) {
+
+									$this->thirdLevelTreeItems[$itemTitle][$tagOrCategory->getUid()] = $treeChild;
+								} else {
+									$treeChild->addChildren($itemTitle,$treeChildOfType);
+								}
+
+
+								switch ($mappingTargetProperty) {
+									case 'tags':
+										$this->addChildToTagsTree($tagOrCategory->getUid(),$treeChild);
+										break;
+									case 'categories':
+										// ------- DEBUG START -------
+										DebugUtility::debug(__FILE__ . ' - Line: ' . __LINE__,'Debug: Markus B.  13.10.13 00:49 ');
+										DebugUtility::debug($treeChild,$itemTitle);
+										// ------- DEBUG END -------
+										$this->addChildToCategoriesTree($tagOrCategory->getUid(),$treeChild);
+										break;
+								}
+								$items[] = $tagOrCategory->getUid();
+							}
+
+						$objectValue = $items;
 						break;
 					default:
-						$objectValue = $currentObject->_getProperty($ObjectProperty);
+						$objectValue = $currentObject->_getProperty($objectProperty);
 				}
-				if (empty($objectValue)) {
+				if(empty($objectValue)) {
 					$objectValue = null;
 				}
 				$mapMarker[$mappingTargetProperty] = $objectValue;
 			}
 		}
 		return $mapMarker;
+	}
+
+	/**
+	 * @param string $label
+	 * @param string $image
+	 * @param int $uid
+	 *
+	 * @return TreeItem
+	 */
+	protected function getTreeItems($label, $image = null, $uid = null) {
+		$treeItem = $this->objectManager->get('emthebi\Extgmaps\Domain\Model\TreeItem');
+//		$treeItem = new TreeItem;
+
+		/* @var TreeItem $treeItem */
+		$treeItem->setLabel($label);
+		$treeItem->setImage($image);
+		$treeItem->setId($uid);
+
+		return $treeItem;
 	}
 
 	/**
@@ -187,6 +377,50 @@ class MapController extends ActionController {
 			$mapType = $this->settings['flexFormMapType'];
 		}
 		return $mapType;
+	}
+
+	/**
+	 * @param TreeItem $categoriesTree
+	 */
+	public function setCategoryTree(TreeItem $categoriesTree) {
+		$this->categoriesTree = $categoriesTree;
+	}
+
+	/**
+	 * @return TreeItem
+	 */
+	public function getCategoriesTree() {
+		return $this->categoriesTree;
+	}
+
+	/**
+	 * @param int	   $uid
+	 * @param TreeItem $child
+	 */
+	public function addChildToCategoriesTree($uid, TreeItem $child) {
+		$this->categoriesTree->addChildren($uid, $child);
+	}
+
+	/**
+	 * @param TreeItem $tagsTree
+	 */
+	public function setTagsTree($tagsTree) {
+		$this->tagsTree = $tagsTree;
+	}
+
+	/**
+	 * @return TreeItem
+	 */
+	public function getTagsTree() {
+		return $this->tagsTree;
+	}
+
+	/**
+	 * @param int	   $uid
+	 * @param TreeItem $child
+	 */
+	public function addChildToTagsTree($uid, TreeItem $child) {
+		$this->tagsTree->addChildren($uid, $child);
 	}
 }
 

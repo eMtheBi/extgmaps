@@ -51,7 +51,7 @@ class ExtensionRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	 * @param int $pid
 	 * @return \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult
 	 */
-	public function findAllWithGeoData($pid = null) {
+	public function findAllWithGeoData($pid = null,$uid = null) {
 		$query = $this->createQuery();
 
 		if (empty($pid)) {
@@ -61,6 +61,9 @@ class ExtensionRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 			$query->getQuerySettings()->setStoragePageIds(array($pid));
 		}
 		$where = array();
+		if (!empty($uid)) {
+			$where[] = $query->equals('uid',$uid);
+		}
 //		$where[] = $query->greaterThan('tags',0);
 //		$where[] = $query->greaterThan('categories',0);
 		$where[] = $query->greaterThan('longitude',0);

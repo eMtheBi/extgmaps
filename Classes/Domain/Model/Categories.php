@@ -32,61 +32,7 @@ namespace emthebi\Extgmaps\Domain\Model;
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  *
  */
-class Categories extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
-
-	/**
-	 * title
-	 *
-	 * @var \string
-	 * @validate NotEmpty
-	 */
-	protected $title;
-
-	/**
-	 * icon for map
-	 *
-	 * @var \string
-	 * @validate NotEmpty
-	 */
-	protected $mapIcon;
-
-	/**
-	 * Returns the title
-	 *
-	 * @return \string $title
-	 */
-	public function getTitle() {
-		return $this->title;
-	}
-
-	/**
-	 * Sets the title
-	 *
-	 * @param \string $title
-	 * @return void
-	 */
-	public function setTitle($title) {
-		$this->title = $title;
-	}
-
-	/**
-	 * Returns the mapIcon
-	 *
-	 * @return \string $mapIcon
-	 */
-	public function getMapIcon() {
-		return $this->mapIcon;
-	}
-
-	/**
-	 * Sets the mapIcon
-	 *
-	 * @param \string $mapIcon
-	 * @return void
-	 */
-	public function setMapIcon($mapIcon) {
-		$this->mapIcon = $mapIcon;
-	}
+class Categories extends BasicTreeModel {
 
 }
 ?>

@@ -19,6 +19,12 @@
 			<trans-unit id="tx_extgmaps_domain_model_page.categories">
 				<source>Categories</source>
 			</trans-unit>
+			<trans-unit id="tx_extgmaps_domain_model_page.header">
+				<source>Header</source>
+			</trans-unit>
+			<trans-unit id="tx_extgmaps_domain_model_page.image">
+				<source>Image</source>
+			</trans-unit>
 
 			<trans-unit id="pages.tx_extbase_type.Tx_Extgmaps_Page">
 				<source>extended goggle maps extension Page</source>
@@ -55,7 +61,7 @@
 			</trans-unit>
 
 			<trans-unit id="tx_extgmaps_domain_model_categories">
-				<source>Tags</source>
+				<source>Categories</source>
 			</trans-unit>
 			<trans-unit id="tx_extgmaps_domain_model_categories.title">
 				<source>Title</source>
@@ -73,6 +79,16 @@
 			</trans-unit>
 			<trans-unit id="contentMapFlexForm.mapType">
 				<source>google map type </source>
+			</trans-unit>
+
+			<trans-unit id="categoryAndTagsFlexForm.sheetTitle">
+				<source>content map config</source>
+			</trans-unit>
+			<trans-unit id="categoryAndTagsFlexForm.tags">
+				<source>select tags for usage</source>
+			</trans-unit>
+			<trans-unit id="categoryAndTagsFlexForm.categories">
+				<source>select categories for usage</source>
 			</trans-unit>
 
 		</body>
