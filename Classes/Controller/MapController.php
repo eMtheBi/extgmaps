@@ -102,6 +102,32 @@ class MapController extends ActionController {
 	}
 
 	/**
+	 * Action for single map with with location set by user
+	 */
+	public function singleMapAction() {
+		$mapObjects = array();
+		$gridSize = $this->getContentMapGridSize();
+		$mapType = $this->getGoogleMapType();
+		$mapObjectsAsJson = json_encode($mapObjects);
+
+		$queryResultObject = $this->contentRepository->findAllWithGeoData($this->configurationManager->getContentObject()->data['pid'],$this->configurationManager->getContentObject()->data['uid']);
+		/* @var \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $queryResultObject*/
+		if ($queryResultObject->count()) {
+			$contentObject = $queryResultObject->getFirst();
+			/* @var Content $contentObject */
+			$mapObjects[] = $this->fillMapObject($contentObject);
+		}
+
+		// ------- DEBUG START -------
+		DebugUtility::debug(__FILE__ . ' - Line: ' . __LINE__,'Debug: Markus B.  19.10.13 14:59 ');
+		DebugUtility::debug($mapObjects);
+		// ------- DEBUG END -------
+		$this->view->assign('mapType', $mapType);
+		$this->view->assign('gridSize', $gridSize);
+		$this->view->assign('mapObjectsAsJson', $mapObjectsAsJson);
+
+	}
+	/**
 	 * Action for map which has to be placed on pages
 	 */
 	public function contentMapAction() {
@@ -231,7 +257,7 @@ class MapController extends ActionController {
 	 * @return array
 	 * @throws \TYPO3\CMS\Extbase\Exception
 	 */
-	protected function fillMapObject($currentObject, $allowedIds) {
+	protected function fillMapObject($currentObject, $allowedIds = array()) {
 		$useFAL = false;
 		$tableName = '';
 

@@ -5,15 +5,29 @@ if (!defined('TYPO3_MODE')) {
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
 	'emthebi.' . $_EXTKEY,
-	'ContentMap',
+	'SingleMap',
 	array(
-		'Map' => 'contentMap',
+		'Map' => 'singleMap',
 		
 	),
 	// non-cacheable actions
 	array(
-		'Map' => 'contentMap',
+		'Map' => 'singleMap',
 		
+	)
+);
+
+\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+	'emthebi.' . $_EXTKEY,
+	'ContentMap',
+	array(
+		'Map' => 'contentMap',
+
+	),
+	// non-cacheable actions
+	array(
+		'Map' => 'contentMap',
+
 	)
 );
 
