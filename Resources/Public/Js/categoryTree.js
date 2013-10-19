@@ -23,6 +23,10 @@ var data = [
 //console.log(categoriesTree.children);
 //console.log(data);
 jQuery(function() {
+
+	if(categoriesTree.length == 0) {
+		return;
+	}
 	var categoryTree = jQuery('#categoryTree');
 	categoryTree.tree({
 		data: categoriesTree.children

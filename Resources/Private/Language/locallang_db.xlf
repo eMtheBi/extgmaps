@@ -71,6 +71,29 @@
 			</trans-unit>
 
 
+			<trans-unit id="singleMapFlexForm.sheetTitle">
+				<source>single map config</source>
+			</trans-unit>
+			<trans-unit id="singleMapFlexForm.gridSize">
+				<source>Cluster gridSize</source>
+			</trans-unit>
+			<trans-unit id="singleMapFlexForm.mapType">
+				<source>google map type </source>
+			</trans-unit>
+			<trans-unit id="singleMapFlexForm.title">
+				<source>title</source>
+			</trans-unit>
+			<trans-unit id="singleMapFlexForm.header">
+				<source>header</source>
+			</trans-unit>
+			<trans-unit id="singleMapFlexForm.description">
+				<source>description</source>
+			</trans-unit>
+
+			<trans-unit id="singleMapFlexForm.image">
+				<source>image</source>
+			</trans-unit>
+
 			<trans-unit id="contentMapFlexForm.sheetTitle">
 				<source>content map config</source>
 			</trans-unit>

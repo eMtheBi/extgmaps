@@ -81,8 +81,9 @@ function buildMap() {
 
 		switch(extGMapType) {
 			case 'contentMap':
+			case 'singleMap':
 				var mapOptions = {
-					zoom: 8,
+					zoom: 12,
 					center: myLatLng,
 					mapTypeId: getMapType(mapType),
 					mapTypeControl: false,

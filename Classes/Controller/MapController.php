@@ -108,7 +108,6 @@ class MapController extends ActionController {
 		$mapObjects = array();
 		$gridSize = $this->getContentMapGridSize();
 		$mapType = $this->getGoogleMapType();
-		$mapObjectsAsJson = json_encode($mapObjects);
 
 		$queryResultObject = $this->contentRepository->findAllWithGeoData($this->configurationManager->getContentObject()->data['pid'],$this->configurationManager->getContentObject()->data['uid']);
 		/* @var \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $queryResultObject*/
@@ -118,10 +117,15 @@ class MapController extends ActionController {
 			$mapObjects[] = $this->fillMapObject($contentObject);
 		}
 
-		// ------- DEBUG START -------
-		DebugUtility::debug(__FILE__ . ' - Line: ' . __LINE__,'Debug: Markus B.  19.10.13 14:59 ');
-		DebugUtility::debug($mapObjects);
-		// ------- DEBUG END -------
+		// inject data from flexForm settings
+		foreach($mapObjects[0] as $key => $value) {
+			if (isset($this->settings[$key]) && !empty($this->settings[$key])) {
+				$mapObjects[0][$key] = $this->settings[$key];
+			}
+		}
+		$mapObjectsAsJson = json_encode($mapObjects);
+
+		$this->view->assign('categoriesTree', json_encode(array()));
 		$this->view->assign('mapType', $mapType);
 		$this->view->assign('gridSize', $gridSize);
 		$this->view->assign('mapObjectsAsJson', $mapObjectsAsJson);
