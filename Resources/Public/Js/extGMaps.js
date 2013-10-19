@@ -33,6 +33,9 @@ var extGoogleMapStyles = [
 	}
 ];
 
+var infoBoxTemplate = jQuery('.infoBoxTemplate');
+jQuery('.infoBoxTemplate').remove();
+
 var infoBoxOptions = {
 	disableAutoPan: false,
 	maxWidth: 0,
@@ -75,7 +78,7 @@ function getMapType(mapType) {
 function buildMap() {
 
 	if(extGoogleMapLoaded == false) {
-		var myLatLng = new google.maps.LatLng(54.897997816965606, 8.372894287109375);
+		var myLatLng = new google.maps.LatLng(defaultGeoCoordinates.latitude, defaultGeoCoordinates.longitude);
 
 		bounds = new google.maps.LatLngBounds();
 
@@ -115,19 +118,22 @@ function buildMap() {
 	}
 }
 
-
 jQuery(document).ready(function() {
 	buildMap();
 });
 
-function getMapMarker(id,objElement) {
+/**
+ * create an markerData Object with some information needed for show marker on map
+ * @param id
+ * @param objElement
+ * @returns {*}
+ */
+function getMapMarker(id, objElement) {
 	var markerLatLng = new google.maps.LatLng(objElement.latitude, objElement.longitude);
 	bounds.extend(markerLatLng);
 	var picto = '/typo3conf/ext/extgmaps/Resources/Public/Images/MapCluster/bubble-green-small.png';
 	var image = new google.maps.MarkerImage(picto, null, null, null, new google.maps.Size(25, 25));
-	var title = (objElement.title) ? objElement.title : '' ;
-	title += (objElement.header) ? objElement.header : '' ;
-	title += (objElement.description) ? objElement.description : '' ;
+	var title = (objElement.title) ? objElement.title + ' ' : '';
 
 	mapDataJson[id].marker = new google.maps.Marker({
 		position: markerLatLng,
@@ -136,21 +142,43 @@ function getMapMarker(id,objElement) {
 	});
 
 	markerData = new Object();
-	markerData['title'] = title;
+
+	markerData['title'] = objElement.title;
+	markerData['header'] = objElement.header;
+	markerData['description'] = objElement.description;
+	markerData['url'] = objElement.url;
+	markerData['image'] = objElement.image;
 	markerData['markerLatLng'] = markerLatLng;
 	markerData['id'] = id;
 	return markerData;
 }
 
+/**
+ * open infoBox on marker click and add content to infoBox
+ * @param markerData
+ */
 function addListenerForMarker(markerData) {
 	google.maps.event.addListener(mapDataJson[markerData.id].marker, 'click', function() {
+		infoBoxTemplate.find('.title').html(markerData.title);
+		infoBoxTemplate.find('.header').html(markerData.header);
+		infoBoxTemplate.find('.image').html(markerData.image);
+		infoBoxTemplate.find('.description').html(markerData.description);
+		if (markerData.url != undefined) {
+			infoBoxTemplate.find('.detailLink').attr('href',markerData.url);
+		} else {
+			infoBoxTemplate.find('.detailLink').remove();
+		}
+
 		extGoogleMap.setCenter(markerData.markerLatLng);
 		infoBox.open(extGoogleMap, this);
-		infoBox.setContent(markerData.title);
-
+		infoBox.setContent(infoBoxTemplate.html());
 	});
 }
 
+/**
+ * if listMarkerClusterer isset, clear Cluster and add new Markers,
+ * else create new MarkerClusterer
+ */
 function handleClustering() {
 	if(listMarkerClusterer) {
 		listMarkerClusterer.clearMarkers();
@@ -172,7 +200,7 @@ function setMarker() {
 		listClusterMarkers = [];
 		jQuery.each(mapDataJson, function(id, objElement) {
 
-			var markerData = getMapMarker(id,objElement);
+			var markerData = getMapMarker(id, objElement);
 
 			listClusterMarkers.push(mapDataJson[id].marker);
 
@@ -182,6 +210,9 @@ function setMarker() {
 		gridSize = 40;
 
 		extGoogleMap.fitBounds(bounds);
+		if (extGoogleMap.getZoom() > 12) {
+			extGoogleMap.setZoom(12);
+		}
 		handleClustering();
 	}
 }
@@ -200,12 +231,12 @@ function filterMarker() {
 			var markerData = false;
 			mapDataJson[id].marker.setMap(null);
 			if(currentBounds.contains(mapDataJson[id].marker.position) == true) {
-				markerData = getMapMarker(id,objElement);
+				markerData = getMapMarker(id, objElement);
 			}
 			if(arrayIntersect(selCats, mapDataJson[id][7]).length > 0) { //selCats.length == 0 ||
 				listClusterMarkers.push(mapDataJson[id].marker);
 			}
-			if (markerData) {
+			if(markerData) {
 
 				addListenerForMarker(markerData);
 			}

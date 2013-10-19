@@ -19,15 +19,6 @@
 							</config>
                         </TCEforms>
                     </settings.flexFormGridSize>
-                    <settings.title>
-                        <TCEforms>
-                            <label>LLL:EXT:extgmaps/Resources/Private/Language/locallang_db.xlf:singleMapFlexForm.title</label>
-							<config>
-								<type>input</type>
-								<size>40</size>
-							</config>
-                        </TCEforms>
-                    </settings.title>
                     <settings.header>
                         <TCEforms>
                             <label>LLL:EXT:extgmaps/Resources/Private/Language/locallang_db.xlf:singleMapFlexForm.header</label>
@@ -37,6 +28,15 @@
 							</config>
                         </TCEforms>
                     </settings.header>
+                    <settings.title>
+                        <TCEforms>
+                            <label>LLL:EXT:extgmaps/Resources/Private/Language/locallang_db.xlf:singleMapFlexForm.title</label>
+							<config>
+								<type>input</type>
+								<size>40</size>
+							</config>
+                        </TCEforms>
+                    </settings.title>
                     <settings.description>
                         <TCEforms>
                             <label>LLL:EXT:extgmaps/Resources/Private/Language/locallang_db.xlf:singleMapFlexForm.description</label>
@@ -61,7 +61,36 @@
 							</config>
                         </TCEforms>
                     </settings.image>
-
+                    <settings.url>
+                        <TCEforms>
+                            <label>LLL:EXT:extgmaps/Resources/Private/Language/locallang_db.xlf:singleMapFlexForm.url</label>
+							<config>
+								<type>input</type>
+								<eval>trim</eval>
+								<size>40</size>
+								<wizards type="array">
+									<link type="array">
+										<type>popup</type>
+										<icon>link_popup.gif</icon>
+										<script>browse_links.php?mode=wizard</script>
+										<params>
+											<blindLinkOptions>mail,url,spec,folder,file</blindLinkOptions>
+										</params>
+										<JSopenParams>height=300,width=500,status=0,menubar=0,scrollbars=1</JSopenParams>
+									</link>
+								</wizards>
+							</config>
+                        </TCEforms>
+                    </settings.url>
+					<!--<settings.flexFormMap>-->
+						<!--<TCEforms>-->
+							<!--<label>LLL:EXT:extgmaps/Resources/Private/Language/locallang_db.xlf:tx_extgmaps_domain_model_page.map</label>-->
+							<!--<config>-->
+							<!--<type>select</type>-->
+							<!--<itemsProcFunc>emthebi\Extgmaps\Services\TceMap->displayMap</itemsProcFunc>-->
+							<!--</config>-->
+						<!--</TCEforms>-->
+					<!--</settings.flexFormMap>-->
 					<settings.flexFormMapType>
 						<TCEforms>
 							<label>LLL:EXT:extgmaps/Resources/Private/Language/locallang_db.xlf:singleMapFlexForm.mapType</label>

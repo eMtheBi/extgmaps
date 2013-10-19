@@ -1,4 +1,5 @@
 <?php
+namespace emthebi\Extgmaps\Services;
 /***************************************************************
  *  Copyright notice
  *

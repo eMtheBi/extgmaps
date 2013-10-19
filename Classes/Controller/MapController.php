@@ -120,21 +120,69 @@ class MapController extends ActionController {
 		// inject data from flexForm settings
 		foreach($mapObjects[0] as $key => $value) {
 			if (isset($this->settings[$key]) && !empty($this->settings[$key])) {
-				$mapObjects[0][$key] = $this->settings[$key];
+				switch($key) {
+					case 'image':
+						$image = $this->createInfoBoxImage($this->settings[$key],$this->settings['title']);
+						$mapObjects[0][$key] = $image;
+						break;
+					default:
+					$mapObjects[0][$key] = $this->settings[$key];
+				}
 			}
 		}
-		$mapObjectsAsJson = json_encode($mapObjects);
 
+		if (is_numeric($this->settings['url'])) {
+			$url = $this->buildUri($this->settings['url']);
+		} else {
+			$url = $this->settings['url'];
+		}
+
+		if (!empty($url)) {
+			$mapObjects[0]['url'] = $url;
+		}
+
+		$mapDefaultGeoData = array(
+			'latitude' => $mapObjects[0]['latitude'],
+			'longitude' => $mapObjects[0]['longitude']
+		);
+		$mapDefaultGeoDataAsJson = json_encode($mapDefaultGeoData);
+
+		$mapObjectsAsJson = json_encode($mapObjects);
 		$this->view->assign('categoriesTree', json_encode(array()));
+		$this->view->assign('mapDefaultGeoData', $mapDefaultGeoDataAsJson);
 		$this->view->assign('mapType', $mapType);
 		$this->view->assign('gridSize', $gridSize);
 		$this->view->assign('mapObjectsAsJson', $mapObjectsAsJson);
 
 	}
+
+	protected function getDefaultGeoCoordinates() {
+		$mapDefaultGeoData = array(
+			'latitude' => 0,
+			'longitude' => 0
+		);
+
+		$queryResultObject = $this->contentRepository->findAllWithGeoData($this->configurationManager->getContentObject()->data['pid'],$this->configurationManager->getContentObject()->data['uid']);
+		/* @var \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $mapPluginObject*/
+		if ($queryResultObject->count()) {
+			$mapPluginObject = $queryResultObject->getFirst();
+			/* @var Content $mapPluginObject */
+			$mapDefaultGeoData['latitude'] = $mapPluginObject->getLatitude();
+			$mapDefaultGeoData['longitude'] = $mapPluginObject->getLongitude();
+		}
+// ------- DEBUG START -------
+DebugUtility::debug(__FILE__ . ' - Line: ' . __LINE__,'Debug: Markus B.  20.10.13 00:52 ');
+DebugUtility::debug($mapDefaultGeoData);
+// ------- DEBUG END -------
+		return json_encode($mapDefaultGeoData);
+	}
+
 	/**
 	 * Action for map which has to be placed on pages
 	 */
 	public function contentMapAction() {
+
+		$mapDefaultGeoData = $this->getDefaultGeoCoordinates();
 
 		$mapObjects = array();
 		$pagesWithGeoInformation = $this->pageRepository->findAllWithGeoData(null, $this->configurationManager->getContentObject()->data['pid']);
@@ -159,6 +207,8 @@ class MapController extends ActionController {
 		$tagsTree = $this->getTreeAsJson('tags');
 		$categoriesTree = $this->getTreeAsJson('categories');
 
+
+		$this->view->assign('mapDefaultGeoData', $mapDefaultGeoData);
 		$this->view->assign('mapType', $mapType);
 		$this->view->assign('categoriesTree', $categoriesTree);
 		$this->view->assign('gridSize', $gridSize);
@@ -303,7 +353,8 @@ class MapController extends ActionController {
 							if(is_array($fileObjects) && count($fileObjects) > 0) {
 								$fileObject = $fileObjects[0];
 								/* @var \TYPO3\CMS\Core\Resource\FileReference $fileObject */
-								$objectValue = $fileObject->getPublicUrl();
+//								$objectValue = $fileObject->getPublicUrl();
+								$objectValue = $this->createInfoBoxImage($fileObject->getPublicUrl(),$currentObject->getTitle());
 							}
 						}
 						break;
@@ -443,6 +494,58 @@ class MapController extends ActionController {
 	 */
 	public function addChildToTagsTree($uid, TreeItem $child) {
 		$this->tagsTree->addChildren($uid, $child);
+	}
+
+	/**
+	 * build typo3 url
+	 *
+	 * @param int   $pageUid          uid of the page object
+	 * @param array $additionalParams query parameters to be attached to the resulting URI
+	 *
+	 * @return string
+	 */
+	protected function buildUri($pageUid, array $additionalParams = array()) {
+		$uri = $this->uriBuilder
+			->setTargetPageUid($pageUid)
+			->setCreateAbsoluteUri(true)
+			->setArguments($additionalParams)
+			->build();
+
+		return $uri;
+	}
+
+	/**
+	 * createInfoBoxImage
+	 * create an GifBuilder Image
+	 *
+	 * @param string $imagePath
+	 * @param string $title
+	 *
+	 * @return string img tag
+	 */
+	public function createInfoBoxImage($imagePath , $title) {
+		$imageTag = '';
+
+		if (isset($this->settings['infoBoxImageSize']) && !empty($this->settings['infoBoxImageSize'])) {
+			$imageSize = $this->settings['infoBoxImageSize'];
+			$imgConf['file'] = 'GIFBUILDER';
+			$imgConf['file.']['XY'] = $imageSize['x'] . ',' . $imageSize['y'];
+			$imgConf['file.']['format'] = 'jpg';
+			$imgConf['file.']['quality'] = 90;
+			$imgConf['file.']['10'] = 'IMAGE';
+			$imgConf['file.']['10.']['align'] = 'c,t';
+			$imgConf['file.']['10.']['offset'] = '0,0';
+			$imgConf['file.']['10.']['file'] = $imagePath;
+			$imgConf['file.']['10.']['file.']['width'] = $imageSize['x'] . 'c';
+			$imgConf['file.']['10.']['file.']['height'] = $imageSize['y'] . 'c-0';
+
+			if($title != '') {
+				$imgConf['stdWrap.']['addParams.']['title'] = $title;
+			}
+			$imageTag =  $this->configurationManager->getContentObject()->cObjGetSingle('IMAGE', $imgConf);
+		}
+
+		return $imageTag;
 	}
 }
 

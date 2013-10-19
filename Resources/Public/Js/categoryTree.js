@@ -1,27 +1,3 @@
-var data = [
-	{
-		label: 'category1',
-		children: [
-			{ label: 'test1', id: 11 },
-			{ label: 'test2', id: 12 },
-			{ label: 'test3', id: 13 },
-			{ label: 'test4', id: 14, children: [
-				{ label: 'test41', id: 21},
-				{ label: 'test42', id: 22},
-				{ label: 'test43', id: 23},
-				{ label: 'test44', id: 24}
-			] }
-		]
-	},
-	{
-		label: 'category2',
-		children: [
-			{ label: 'child3' }
-		]
-	}
-];
-//console.log(categoriesTree.children);
-//console.log(data);
 jQuery(function() {
 
 	if(categoriesTree.length == 0) {
@@ -49,7 +25,7 @@ jQuery(function() {
 		}
 	);
 });
-function recursiveHandlingOfNodes(categoryTree,node) {
+function recursiveHandlingOfNodes(categoryTree, node) {
 	var is_selected = categoryTree.tree('isNodeSelected', node);
 	if(is_selected) {
 		for(var i = 0; i < node.children.length; i++) {

@@ -58,6 +58,9 @@
 			<trans-unit id="tagsTree">
 				<source>Tags...</source>
 			</trans-unit>
+			<trans-unit id="detailLink">
+				<source>detailLink</source>
+			</trans-unit>
 
 		</body>
 	</file>
