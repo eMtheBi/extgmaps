@@ -89,12 +89,14 @@
 			<trans-unit id="singleMapFlexForm.description">
 				<source>description</source>
 			</trans-unit>
-
 			<trans-unit id="singleMapFlexForm.image">
 				<source>image</source>
 			</trans-unit>
 			<trans-unit id="singleMapFlexForm.url">
 				<source>link to</source>
+			</trans-unit>
+			<trans-unit id="singleMapFlexForm.flexFormMapIcon">
+				<source>map icon</source>
 			</trans-unit>
 
 			<trans-unit id="contentMapFlexForm.sheetTitle">

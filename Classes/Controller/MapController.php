@@ -109,9 +109,9 @@ class MapController extends ActionController {
 		$gridSize = $this->getContentMapGridSize();
 		$mapType = $this->getGoogleMapType();
 
-		$queryResultObject = $this->contentRepository->findAllWithGeoData($this->configurationManager->getContentObject()->data['pid'],$this->configurationManager->getContentObject()->data['uid']);
-		/* @var \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $queryResultObject*/
-		if ($queryResultObject->count()) {
+		$queryResultObject = $this->contentRepository->findAllWithGeoData($this->configurationManager->getContentObject()->data['pid'], $this->configurationManager->getContentObject()->data['uid']);
+		/* @var \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $queryResultObject */
+		if($queryResultObject->count()) {
 			$contentObject = $queryResultObject->getFirst();
 			/* @var Content $contentObject */
 			$mapObjects[] = $this->fillMapObject($contentObject);
@@ -119,25 +119,45 @@ class MapController extends ActionController {
 
 		// inject data from flexForm settings
 		foreach($mapObjects[0] as $key => $value) {
-			if (isset($this->settings[$key]) && !empty($this->settings[$key])) {
+			if(isset($this->settings[$key]) && !empty($this->settings[$key])) {
 				switch($key) {
 					case 'image':
-						$image = $this->createInfoBoxImage($this->settings[$key],$this->settings['title']);
+						$image = $this->createInfoBoxImage($this->settings[$key], $this->settings['title']);
 						$mapObjects[0][$key] = $image;
 						break;
 					default:
-					$mapObjects[0][$key] = $this->settings[$key];
+						$mapObjects[0][$key] = $this->settings[$key];
 				}
 			}
 		}
 
-		if (is_numeric($this->settings['url'])) {
+		// allow custom mapIcon
+		if (!empty($this->settings['flexFormMapIcon'])) {
+			$mapObjects[0]['mapIcon'] = $this->settings['flexFormMapIcon'];
+		}
+
+		$url = null;
+		// check if url is an page uid or a string/url
+		if(is_numeric($this->settings['url'])) {
 			$url = $this->buildUri($this->settings['url']);
 		} else {
 			$url = $this->settings['url'];
+
+			if ( $parts = parse_url($url) ) {
+				if ( !isset($parts["scheme"]) )
+				{
+					$url = "http://$url";
+				}
+			}
+			$validUrl = filter_var($url, FILTER_VALIDATE_URL);
+			if ($validUrl) {
+				$url = $this->settings['url'];
+			} else {
+				$url = null;
+			}
 		}
 
-		if (!empty($url)) {
+		if(!empty($url)) {
 			$mapObjects[0]['url'] = $url;
 		}
 
@@ -153,32 +173,33 @@ class MapController extends ActionController {
 		$this->view->assign('mapType', $mapType);
 		$this->view->assign('gridSize', $gridSize);
 		$this->view->assign('mapObjectsAsJson', $mapObjectsAsJson);
-
 	}
 
+	/**
+	 * get default geo coordinate from current included plugin to use this as start point
+	 * @return string array json encoded
+	 */
 	protected function getDefaultGeoCoordinates() {
 		$mapDefaultGeoData = array(
 			'latitude' => 0,
 			'longitude' => 0
 		);
 
-		$queryResultObject = $this->contentRepository->findAllWithGeoData($this->configurationManager->getContentObject()->data['pid'],$this->configurationManager->getContentObject()->data['uid']);
-		/* @var \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $mapPluginObject*/
-		if ($queryResultObject->count()) {
+		$queryResultObject = $this->contentRepository->findAllWithGeoData($this->configurationManager->getContentObject()->data['pid'], $this->configurationManager->getContentObject()->data['uid']);
+		/* @var \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $mapPluginObject */
+		if($queryResultObject->count()) {
 			$mapPluginObject = $queryResultObject->getFirst();
 			/* @var Content $mapPluginObject */
 			$mapDefaultGeoData['latitude'] = $mapPluginObject->getLatitude();
 			$mapDefaultGeoData['longitude'] = $mapPluginObject->getLongitude();
 		}
-// ------- DEBUG START -------
-DebugUtility::debug(__FILE__ . ' - Line: ' . __LINE__,'Debug: Markus B.  20.10.13 00:52 ');
-DebugUtility::debug($mapDefaultGeoData);
-// ------- DEBUG END -------
+
 		return json_encode($mapDefaultGeoData);
 	}
 
 	/**
 	 * Action for map which has to be placed on pages
+	 * @todo allow different mapIcons for each type (eg. pages, content,.. )
 	 */
 	public function contentMapAction() {
 
@@ -188,7 +209,7 @@ DebugUtility::debug($mapDefaultGeoData);
 		$pagesWithGeoInformation = $this->pageRepository->findAllWithGeoData(null, $this->configurationManager->getContentObject()->data['pid']);
 		$contentElementsWithGeoInformation = $this->contentRepository->findAllWithGeoData($this->configurationManager->getContentObject()->data['pid']);
 		$allowedIds = array();
-		$allowedIds['categories'] =  $this->getAllowedIdsFromFlexForm($this->settings['flexFormCategories']);
+		$allowedIds['categories'] = $this->getAllowedIdsFromFlexForm($this->settings['flexFormCategories']);
 		$allowedIds['tags'] = $this->getAllowedIdsFromFlexForm($this->settings['flexFormTags']);
 
 		foreach($pagesWithGeoInformation as $pageWithGeoInformation) {
@@ -207,7 +228,6 @@ DebugUtility::debug($mapDefaultGeoData);
 		$tagsTree = $this->getTreeAsJson('tags');
 		$categoriesTree = $this->getTreeAsJson('categories');
 
-
 		$this->view->assign('mapDefaultGeoData', $mapDefaultGeoData);
 		$this->view->assign('mapType', $mapType);
 		$this->view->assign('categoriesTree', $categoriesTree);
@@ -220,9 +240,9 @@ DebugUtility::debug($mapDefaultGeoData);
 	 *
 	 * @return string
 	 */
-	protected function getTreeAsJson($type){
+	protected function getTreeAsJson($type) {
 		$treeItem = null;
-		switch ($type) {
+		switch($type) {
 			case 'tags':
 				$treeItem = $this->getTagsTree();
 				break;
@@ -242,15 +262,16 @@ DebugUtility::debug($mapDefaultGeoData);
 
 	/**
 	 * helper function to get recursive all children items
+	 *
 	 * @param TreeItem $tree
 	 * @param int      $deep
 	 *
 	 * @return array
 	 */
-	protected function getTreeChildren (TreeItem $tree,$deep = 0) {
+	protected function getTreeChildren(TreeItem $tree, $deep = 0) {
 		$properties = $tree->_getProperties();
 		$children = array();
-		if ($deep == 0) {
+		if($deep == 0) {
 			// only on first call
 			foreach($properties['children'] as $treeChild) {
 				/* @var TreeItem $treeChild */
@@ -259,19 +280,18 @@ DebugUtility::debug($mapDefaultGeoData);
 			}
 		}
 
-		$deep++ ;
+		$deep++;
 
-		if (empty($children) && array_key_exists($properties['label'],$this->thirdLevelTreeItems)) {
+		if(empty($children) && array_key_exists($properties['label'], $this->thirdLevelTreeItems)) {
 			$itemArray = $this->thirdLevelTreeItems[$properties['label']];
 			foreach($itemArray as $treeItem) {
-				if ($deep < 2)
-				$children[] = $this->getTreeChildren($treeItem, $deep);
+				if($deep < 2) {
+					$children[] = $this->getTreeChildren($treeItem, $deep);
+				}
 			}
-
 		}
 		$properties['children'] = $children;
 		return $properties;
-
 	}
 
 	/**
@@ -286,7 +306,6 @@ DebugUtility::debug($mapDefaultGeoData);
 		$itemTitle = LocalizationUtility::translate('categoriesTree', $this->request->getControllerExtensionKey());
 		$categoriesTree = $this->getTreeItems($itemTitle);
 		$this->setCategoryTree($categoriesTree);
-
 	}
 
 	/**
@@ -306,6 +325,7 @@ DebugUtility::debug($mapDefaultGeoData);
 	 * use TypoScript mapping settings to read properties from given object
 	 *
 	 * @param $currentObject
+	 *
 	 * @Param array $allowedIds
 	 *
 	 * @return array
@@ -330,9 +350,9 @@ DebugUtility::debug($mapDefaultGeoData);
 
 		$mapMarker = array();
 
-		if (!isset($mappings['type']) || empty($mappings['type'])) {
+		if(!isset($mappings['type']) || empty($mappings['type'])) {
 			//@todo insert TS
-			throw new Exception('no mapping type set',123);
+			throw new Exception('no mapping type set', 123);
 		}
 
 		$itemTitle = LocalizationUtility::translate($mappings['type'], $this->request->getControllerExtensionKey());
@@ -354,7 +374,7 @@ DebugUtility::debug($mapDefaultGeoData);
 								$fileObject = $fileObjects[0];
 								/* @var \TYPO3\CMS\Core\Resource\FileReference $fileObject */
 //								$objectValue = $fileObject->getPublicUrl();
-								$objectValue = $this->createInfoBoxImage($fileObject->getPublicUrl(),$currentObject->getTitle());
+								$objectValue = $this->createInfoBoxImage($fileObject->getPublicUrl(), $currentObject->getTitle());
 							}
 						}
 						break;
@@ -362,34 +382,34 @@ DebugUtility::debug($mapDefaultGeoData);
 					case 'categories':
 						$items = array();
 
-							foreach($currentObject->_getProperty($objectProperty) as $tagOrCategory) {
-								/* @var BasicTreeModel $tagOrCategory */
+						foreach($currentObject->_getProperty($objectProperty) as $tagOrCategory) {
+							/* @var BasicTreeModel $tagOrCategory */
 
-								// if tags or category not in array, skip entry
-								if (!in_array($tagOrCategory->getUid(), $allowedIds[$mappingTargetProperty]) && count($allowedIds[$mappingTargetProperty]) > 0) {
-									continue;
-								}
-								$treeChild = $this->getTreeItems($tagOrCategory->getTitle(),$tagOrCategory->getMapIcon(),$tagOrCategory->getUid());
-
-								if ($this->settings['treeThirdLevel'] == $mappingTargetProperty &&
-									!isset($this->thirdLevelTreeItems[$itemTitle][$tagOrCategory->getUid()])) {
-
-									$this->thirdLevelTreeItems[$itemTitle][$tagOrCategory->getUid()] = $treeChild;
-								} else {
-									$treeChild->addChildren($itemTitle,$treeChildOfType);
-								}
-
-
-								switch ($mappingTargetProperty) {
-									case 'tags':
-										$this->addChildToTagsTree($tagOrCategory->getUid(),$treeChild);
-										break;
-									case 'categories':
-										$this->addChildToCategoriesTree($tagOrCategory->getUid(),$treeChild);
-										break;
-								}
-								$items[] = $tagOrCategory->getUid();
+							// if tags or category not in array, skip entry
+							if(!in_array($tagOrCategory->getUid(), $allowedIds[$mappingTargetProperty]) && count($allowedIds[$mappingTargetProperty]) > 0) {
+								continue;
 							}
+							$treeChild = $this->getTreeItems($tagOrCategory->getTitle(), $tagOrCategory->getMapIcon(), $tagOrCategory->getUid());
+
+							if($this->settings['treeThirdLevel'] == $mappingTargetProperty &&
+								!isset($this->thirdLevelTreeItems[$itemTitle][$tagOrCategory->getUid()])
+							) {
+
+								$this->thirdLevelTreeItems[$itemTitle][$tagOrCategory->getUid()] = $treeChild;
+							} else {
+								$treeChild->addChildren($itemTitle, $treeChildOfType);
+							}
+
+							switch($mappingTargetProperty) {
+								case 'tags':
+									$this->addChildToTagsTree($tagOrCategory->getUid(), $treeChild);
+									break;
+								case 'categories':
+									$this->addChildToCategoriesTree($tagOrCategory->getUid(), $treeChild);
+									break;
+							}
+							$items[] = $tagOrCategory->getUid();
+						}
 
 						$objectValue = $items;
 						break;
@@ -408,7 +428,7 @@ DebugUtility::debug($mapDefaultGeoData);
 	/**
 	 * @param string $label
 	 * @param string $image
-	 * @param int $uid
+	 * @param int    $uid
 	 *
 	 * @return TreeItem
 	 */
@@ -467,7 +487,7 @@ DebugUtility::debug($mapDefaultGeoData);
 	}
 
 	/**
-	 * @param int	   $uid
+	 * @param int      $uid
 	 * @param TreeItem $child
 	 */
 	public function addChildToCategoriesTree($uid, TreeItem $child) {
@@ -489,7 +509,7 @@ DebugUtility::debug($mapDefaultGeoData);
 	}
 
 	/**
-	 * @param int	   $uid
+	 * @param int      $uid
 	 * @param TreeItem $child
 	 */
 	public function addChildToTagsTree($uid, TreeItem $child) {
@@ -523,10 +543,10 @@ DebugUtility::debug($mapDefaultGeoData);
 	 *
 	 * @return string img tag
 	 */
-	public function createInfoBoxImage($imagePath , $title) {
+	public function createInfoBoxImage($imagePath, $title) {
 		$imageTag = '';
 
-		if (isset($this->settings['infoBoxImageSize']) && !empty($this->settings['infoBoxImageSize'])) {
+		if(isset($this->settings['infoBoxImageSize']) && !empty($this->settings['infoBoxImageSize'])) {
 			$imageSize = $this->settings['infoBoxImageSize'];
 			$imgConf['file'] = 'GIFBUILDER';
 			$imgConf['file.']['XY'] = $imageSize['x'] . ',' . $imageSize['y'];
@@ -542,7 +562,7 @@ DebugUtility::debug($mapDefaultGeoData);
 			if($title != '') {
 				$imgConf['stdWrap.']['addParams.']['title'] = $title;
 			}
-			$imageTag =  $this->configurationManager->getContentObject()->cObjGetSingle('IMAGE', $imgConf);
+			$imageTag = $this->configurationManager->getContentObject()->cObjGetSingle('IMAGE', $imgConf);
 		}
 
 		return $imageTag;
