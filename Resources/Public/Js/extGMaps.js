@@ -4,6 +4,8 @@ var infoBox = null;
 var extGoogleMap;
 var bounds;
 var selCats = [];
+var selTags = [];
+var selTypes = [];
 var listClusterMarkers = [];
 var mapIconSmall = '/typo3conf/ext/extgmaps/Resources/Public/Images/MapCluster/bubble-green-small.png'
 var mapIconMiddle = '/typo3conf/ext/extgmaps/Resources/Public/Images/MapCluster/bubble-green-middle.png'
@@ -111,7 +113,7 @@ function buildMap() {
 
 		google.maps.event.addListenerOnce(extGoogleMap, 'idle', function() {
 			setMarker();
-//			filterMarker();
+			filterMarker();
 		});
 
 		if(listMarkerClusterer) {
@@ -241,11 +243,16 @@ function filterMarker() {
 			if(currentBounds.contains(mapDataJson[id].marker.position) == true) {
 				markerData = getMapMarker(id, objElement);
 			}
-			if(arrayIntersect(selCats, mapDataJson[id][7]).length > 0) { //selCats.length == 0 ||
+			if(mapDataJson[id].categories != null && arrayIntersect(selCats, mapDataJson[id].categories).length > 0) { //selCats.length == 0 ||
+				listClusterMarkers.push(mapDataJson[id].marker);
+			}
+			if(mapDataJson[id].tags != null && arrayIntersect(selTags, mapDataJson[id].categories).length > 0) { //selCats.length == 0 ||
+				listClusterMarkers.push(mapDataJson[id].marker);
+			}
+			if(mapDataJson[id].tags != null && arrayIntersect(selTypes, mapDataJson[id].categories).length > 0) { //selCats.length == 0 ||
 				listClusterMarkers.push(mapDataJson[id].marker);
 			}
 			if(markerData) {
-
 				addListenerForMarker(markerData);
 			}
 
