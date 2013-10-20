@@ -132,7 +132,7 @@ class MapController extends ActionController {
 		}
 
 		// allow custom mapIcon
-		if (!empty($this->settings['flexFormMapIcon'])) {
+		if(!empty($this->settings['flexFormMapIcon'])) {
 			$mapObjects[0]['mapIcon'] = $this->settings['flexFormMapIcon'];
 		}
 
@@ -143,16 +143,13 @@ class MapController extends ActionController {
 		} else {
 			$url = $this->settings['url'];
 
-			if ( $parts = parse_url($url) ) {
-				if ( !isset($parts["scheme"]) )
-				{
+			if($parts = parse_url($url)) {
+				if(!isset($parts["scheme"])) {
 					$url = "http://$url";
 				}
 			}
 			$validUrl = filter_var($url, FILTER_VALIDATE_URL);
-			if ($validUrl) {
-				$url = $this->settings['url'];
-			} else {
+			if(!$validUrl) {
 				$url = null;
 			}
 		}
@@ -177,6 +174,7 @@ class MapController extends ActionController {
 
 	/**
 	 * get default geo coordinate from current included plugin to use this as start point
+	 *
 	 * @return string array json encoded
 	 */
 	protected function getDefaultGeoCoordinates() {
@@ -422,7 +420,6 @@ class MapController extends ActionController {
 					default:
 						$objectValue = $currentObject->_getProperty($objectProperty);
 				}
-
 
 				if(empty($objectValue)) {
 					$objectValue = null;
