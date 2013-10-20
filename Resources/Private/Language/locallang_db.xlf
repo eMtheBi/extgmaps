@@ -70,6 +70,16 @@
 				<source>Map Icon</source>
 			</trans-unit>
 
+			<trans-unit id="tx_extgmaps_domain_model_themes">
+				<source>Themes</source>
+			</trans-unit>
+			<trans-unit id="tx_extgmaps_domain_model_themes.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_extgmaps_domain_model_themes.map_icon">
+				<source>Map Icon</source>
+			</trans-unit>
+
 
 			<trans-unit id="singleMapFlexForm.sheetTitle">
 				<source>single map config</source>

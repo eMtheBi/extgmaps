@@ -95,7 +95,6 @@ class BasicMapItem extends AbstractEntity  {
 	 * @return Page
 	 */
 	public function __construct() {
-		//Do not remove the next line: It would break the functionality
 		$this->initStorageObjects();
 	}
 
@@ -105,11 +104,6 @@ class BasicMapItem extends AbstractEntity  {
 	 * @return void
 	 */
 	protected function initStorageObjects() {
-		/**
-		 * Do not modify this method!
-		 * It will be rewritten on each save in the extension builder
-		 * You may modify the constructor of this class instead
-		 */
 		$this->tags = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
 		$this->categories = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
 	}

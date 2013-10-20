@@ -32,6 +32,13 @@ use emthebi\Extgmaps\Domain\Model\Page;
 use emthebi\Extgmaps\Domain\Model\BasicTreeModel;
 use emthebi\Extgmaps\Domain\Model\Content;
 use emthebi\Extgmaps\Domain\Model\TreeItem;
+use emthebi\Extgmaps\Domain\Model\Categories;
+use emthebi\Extgmaps\Domain\Model\Themes;
+use emthebi\Extgmaps\Domain\Repository;
+use emthebi\Extgmaps\Domain\Repository\ContentRepository;
+use emthebi\Extgmaps\Domain\Repository\ThemesRepository;
+use emthebi\Extgmaps\Domain\Repository\TagsRepository;
+use emthebi\Extgmaps\Domain\Repository\CategoriesRepository;
 use \TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
 use \TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
@@ -59,6 +66,14 @@ class MapController extends ActionController {
 	 * @inject
 	 */
 	protected $contentRepository;
+
+	/**
+	 * themesRepository
+	 *
+	 * @var \emthebi\Extgmaps\Domain\Repository\ThemesRepository
+	 * @inject
+	 */
+	protected $themesRepository;
 
 	/**
 	 * pageRepository
@@ -90,6 +105,11 @@ class MapController extends ActionController {
 	 * @var TreeItem
 	 */
 	protected $categoriesTree;
+
+	/**
+	 * @var TreeItem
+	 */
+	protected $themesTree;
 
 	/**
 	 * @throws \TYPO3\CMS\Extbase\Exception
@@ -200,6 +220,8 @@ class MapController extends ActionController {
 	 */
 	public function contentMapAction() {
 
+		$this->createThemeTree();
+
 		$mapDefaultGeoData = $this->getDefaultGeoCoordinates();
 
 		$mapObjects = array();
@@ -303,6 +325,10 @@ class MapController extends ActionController {
 		$itemTitle = LocalizationUtility::translate('categoriesTree', $this->request->getControllerExtensionKey());
 		$categoriesTree = $this->getTreeItems($itemTitle);
 		$this->setCategoryTree($categoriesTree);
+
+		$itemTitle = LocalizationUtility::translate('themesTree', $this->request->getControllerExtensionKey());
+		$themeTree = $this->getTreeItems($itemTitle);
+		$this->setThemesTree($themeTree);
 	}
 
 	/**
@@ -316,6 +342,23 @@ class MapController extends ActionController {
 		return $ids;
 	}
 
+	public function createThemeTree() {
+		$themes = $this->themesRepository->findAllIgnoreStorage();
+		foreach ($themes as $theme) {
+			/* @var Themes $theme */
+			$themeChild = $this->getTreeItems($theme->getTitle(), $theme->getMapIcon(), $theme->getUid());
+			foreach ($theme->getCategories() as $category) {
+				/* @var Categories $category*/
+				$categoryChild = $this->getTreeItems($category->getTitle(), $category->getMapIcon(), $category->getUid());
+				$themeChild->addChildren($category->getUid(),$categoryChild);
+			}
+			$this->addChildToThemesTree($theme->getUid(),$themeChild);
+		}
+		// ------- DEBUG START -------
+		DebugUtility::debug(__FILE__ . ' - Line: ' . __LINE__,'Debug: Markus B.  20.10.13 21:59 ');
+		DebugUtility::debug($this->getThemesTree());
+		// ------- DEBUG END -------
+	}
 	/**
 	 * get an Object an fill array with information which will be used from map marker
 	 *
@@ -524,6 +567,28 @@ class MapController extends ActionController {
 	 */
 	public function addChildToTagsTree($uid, TreeItem $child) {
 		$this->tagsTree->addChildren($uid, $child);
+	}
+
+	/**
+	 * @param TreeItem $themesTree
+	 */
+	public function setThemesTree(TreeItem $themesTree) {
+		$this->themesTree = $themesTree;
+	}
+
+	/**
+	 * @return TreeItem
+	 */
+	public function getThemesTree() {
+		return $this->themesTree;
+	}
+
+	/**
+	 * @param int      $uid
+	 * @param TreeItem $child
+	 */
+	public function addChildToThemesTree($uid, TreeItem $child) {
+		$this->themesTree->addChildren($uid, $child);
 	}
 
 	/**

@@ -53,11 +53,15 @@
 
 
 			<trans-unit id="categoriesTree">
-				<source>Categories...</source>
+				<source>Categories</source>
 			</trans-unit>
 			<trans-unit id="tagsTree">
-				<source>Tags...</source>
+				<source>Tags</source>
 			</trans-unit>
+			<trans-unit id="themesTree">
+				<source>Themes</source>
+			</trans-unit>
+
 			<trans-unit id="detailLink">
 				<source>detailLink</source>
 			</trans-unit>
