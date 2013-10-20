@@ -131,12 +131,7 @@ jQuery(document).ready(function() {
 function getMapMarker(id, objElement) {
 	var markerLatLng = new google.maps.LatLng(objElement.latitude, objElement.longitude);
 	bounds.extend(markerLatLng);
-	var picto = '';
-	if (objElement.mapIcon != undefined) {
-		picto = objElement.mapIcon;
-	} else {
-		picto = '/typo3conf/ext/extgmaps/Resources/Public/Images/MapCluster/bubble-green-small.png';
-	}
+	var picto = objElement.mapIcon;
 	var image = new google.maps.MarkerImage(picto, null, null, null, new google.maps.Size(25, 25));
 	var title = (objElement.title) ? objElement.title + ' ' : '';
 

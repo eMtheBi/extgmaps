@@ -199,7 +199,6 @@ class MapController extends ActionController {
 
 	/**
 	 * Action for map which has to be placed on pages
-	 * @todo allow different mapIcons for each type (eg. pages, content,.. )
 	 */
 	public function contentMapAction() {
 
@@ -348,6 +347,13 @@ class MapController extends ActionController {
 			$mappings = $this->settings['mapMarkerMappings']['default'];
 		}
 
+		// get staticDataForGroups
+		if(isset($this->settings['staticDataForGroups'][get_class($currentObject)])) {
+			$staticDataForGroups = $this->settings['staticDataForGroups'][get_class($currentObject)];
+		} else {
+			$staticDataForGroups = $this->settings['staticDataForGroups']['default'];
+		}
+
 		$mapMarker = array();
 
 		if(!isset($mappings['type']) || empty($mappings['type'])) {
@@ -416,12 +422,19 @@ class MapController extends ActionController {
 					default:
 						$objectValue = $currentObject->_getProperty($objectProperty);
 				}
+
+
 				if(empty($objectValue)) {
 					$objectValue = null;
 				}
 				$mapMarker[$mappingTargetProperty] = $objectValue;
 			}
 		}
+
+		foreach($staticDataForGroups as $key => $staticData) {
+			$mapMarker[$key] = $staticData;
+		}
+
 		return $mapMarker;
 	}
 

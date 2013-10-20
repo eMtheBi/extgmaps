@@ -89,4 +89,16 @@ plugin.tx_extgmaps.settings {
 			type = content
 		}
 	}
+
+	staticDataForGroups {
+		default {
+			mapIcon = /typo3conf/ext/extgmaps/Resources/Public/Images/MapCluster/bubble-green-small.png
+		}
+		emthebi\Extgmaps\Domain\Model\Page {
+			mapIcon = /typo3conf/ext/extgmaps/Resources/Public/Images/MapCluster/bubble-green-small.png
+		}
+		emthebi\Extgmaps\Domain\Model\Content {
+			mapIcon = /typo3conf/ext/extgmaps/Resources/Public/Images/MapCluster/bubble-green-small.png
+		}
+	}
 }
