@@ -5,10 +5,13 @@ var extGoogleMap;
 var bounds;
 var selCats = [];
 var listClusterMarkers = [];
+var mapIconSmall = '/typo3conf/ext/extgmaps/Resources/Public/Images/MapCluster/bubble-green-small.png'
+var mapIconMiddle = '/typo3conf/ext/extgmaps/Resources/Public/Images/MapCluster/bubble-green-middle.png'
+var mapIconBig = '/typo3conf/ext/extgmaps/Resources/Public/Images/MapCluster/bubble-green-big.png'
 
 var extGoogleMapStyles = [
 	{
-		url: '/typo3conf/ext/extgmaps/Resources/Public/Images/MapCluster/bubble-green-small.png',
+		url: mapIconSmall,
 		height: 45,
 		width: 45,
 		anchor: [0, 0],
@@ -16,7 +19,7 @@ var extGoogleMapStyles = [
 		textSize: 10
 	},
 	{
-		url: '/typo3conf/ext/extgmaps/Resources/Public/Images/MapCluster/bubble-green-middle.png',
+		url: mapIconMiddle,
 		height: 45,
 		width: 45,
 		anchor: [0, 0],
@@ -24,7 +27,7 @@ var extGoogleMapStyles = [
 		textSize: 11
 	},
 	{
-		url: '/typo3conf/ext/extgmaps/Resources/Public/Images/MapCluster/bubble-green-big.png',
+		url: mapIconBig,
 		height: 45,
 		width: 45,
 		anchor: [0, 0],
@@ -131,7 +134,12 @@ jQuery(document).ready(function() {
 function getMapMarker(id, objElement) {
 	var markerLatLng = new google.maps.LatLng(objElement.latitude, objElement.longitude);
 	bounds.extend(markerLatLng);
-	var picto = objElement.mapIcon;
+	var picto = '';
+	if (objElement.mapIcon != undefined) {
+		picto = objElement.mapIcon;
+	} else {
+		picto = mapIconSmall;
+	}
 	var image = new google.maps.MarkerImage(picto, null, null, null, new google.maps.Size(25, 25));
 	var title = (objElement.title) ? objElement.title + ' ' : '';
 
