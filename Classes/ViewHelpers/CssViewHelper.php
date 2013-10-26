@@ -1,5 +1,5 @@
 <?php
-namespace emthebi\extgmaps\ViewHelpers;
+namespace Emthebi\Extgmaps\ViewHelpers;
 
 	/***************************************************************
 	 *  Copyright notice
@@ -34,10 +34,10 @@ use \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
  * Add css files to template
  *
  * Example:
- * {namespace ext=emthebi\extgmaps\ViewHelpers}
+ * {namespace ext=Emthebi\Extgmaps\ViewHelpers}
  * <ext:css src="myFile.css"/>
  *
- * @package emthebi\extgmaps\ViewHelpers
+ * @package Emthebi\Extgmaps\ViewHelpers
  */
 class CssViewHelper extends AbstractViewHelper {
 

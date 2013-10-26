@@ -1,5 +1,5 @@
 <?php
-namespace emthebi\Extgmaps\Domain\Repository;
+namespace Emthebi\Extgmaps\Domain\Repository;
 
 /***************************************************************
  *  Copyright notice

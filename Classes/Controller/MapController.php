@@ -1,5 +1,5 @@
 <?php
-namespace emthebi\Extgmaps\Controller;
+namespace Emthebi\Extgmaps\Controller;
 
 /***************************************************************
  *  Copyright notice
@@ -28,17 +28,17 @@ use \TYPO3\CMS\Core\Utility\DebugUtility;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
 use \TYPO3\CMS\Extbase\Exception;
 use \TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use emthebi\Extgmaps\Domain\Model\Page;
-use emthebi\Extgmaps\Domain\Model\BasicTreeModel;
-use emthebi\Extgmaps\Domain\Model\Content;
-use emthebi\Extgmaps\Domain\Model\TreeItem;
-use emthebi\Extgmaps\Domain\Model\Categories;
-use emthebi\Extgmaps\Domain\Model\Themes;
-use emthebi\Extgmaps\Domain\Repository;
-use emthebi\Extgmaps\Domain\Repository\ContentRepository;
-use emthebi\Extgmaps\Domain\Repository\ThemesRepository;
-use emthebi\Extgmaps\Domain\Repository\TagsRepository;
-use emthebi\Extgmaps\Domain\Repository\CategoriesRepository;
+use \Emthebi\Extgmaps\Domain\Model\Page;
+use \Emthebi\Extgmaps\Domain\Model\BasicTreeModel;
+use \Emthebi\Extgmaps\Domain\Model\Content;
+use \Emthebi\Extgmaps\Domain\Model\TreeItem;
+use \Emthebi\Extgmaps\Domain\Model\Categories;
+use \Emthebi\Extgmaps\Domain\Model\Themes;
+use \Emthebi\Extgmaps\Domain\Repository;
+use \Emthebi\Extgmaps\Domain\Repository\ContentRepository;
+use \Emthebi\Extgmaps\Domain\Repository\ThemesRepository;
+use \Emthebi\Extgmaps\Domain\Repository\TagsRepository;
+use \Emthebi\Extgmaps\Domain\Repository\CategoriesRepository;
 use \TYPO3\CMS\Extbase\DomainObject\AbstractDomainObject;
 use \TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
@@ -54,7 +54,7 @@ class MapController extends ActionController {
 	/**
 	 * pageRepository
 	 *
-	 * @var \emthebi\Extgmaps\Domain\Repository\PageRepository
+	 * @var \Emthebi\Extgmaps\Domain\Repository\PageRepository
 	 * @inject
 	 */
 	protected $pageRepository;
@@ -62,7 +62,7 @@ class MapController extends ActionController {
 	/**
 	 * pageRepository
 	 *
-	 * @var \emthebi\Extgmaps\Domain\Repository\ContentRepository
+	 * @var \Emthebi\Extgmaps\Domain\Repository\ContentRepository
 	 * @inject
 	 */
 	protected $contentRepository;
@@ -70,7 +70,7 @@ class MapController extends ActionController {
 	/**
 	 * themesRepository
 	 *
-	 * @var \emthebi\Extgmaps\Domain\Repository\ThemesRepository
+	 * @var \Emthebi\Extgmaps\Domain\Repository\ThemesRepository
 	 * @inject
 	 */
 	protected $themesRepository;
@@ -78,7 +78,7 @@ class MapController extends ActionController {
 	/**
 	 * pageRepository
 	 *
-	 * @var \emthebi\Extgmaps\Domain\Repository\CategoriesRepository
+	 * @var \Emthebi\Extgmaps\Domain\Repository\CategoriesRepository
 	 * @inject
 	 */
 	protected $categoriesRepository;
@@ -86,7 +86,7 @@ class MapController extends ActionController {
 	/**
 	 * pageRepository
 	 *
-	 * @var \emthebi\Extgmaps\Domain\Repository\TagsRepository
+	 * @var \Emthebi\Extgmaps\Domain\Repository\TagsRepository
 	 * @inject
 	 */
 	protected $tagsRepository;
@@ -246,10 +246,11 @@ class MapController extends ActionController {
 
 		$tagsTree = $this->getTreeAsJson('tags');
 		$categoriesTree = $this->getTreeAsJson('categories');
+		$themesTree = $this->getTreeAsJson('themes');
 
 		$this->view->assign('mapDefaultGeoData', $mapDefaultGeoData);
 		$this->view->assign('mapType', $mapType);
-		$this->view->assign('categoriesTree', $categoriesTree);
+		$this->view->assign('categoriesTree', $themesTree);
 		$this->view->assign('gridSize', $gridSize);
 		$this->view->assign('mapObjectsAsJson', $mapObjectsAsJson);
 	}
@@ -267,6 +268,9 @@ class MapController extends ActionController {
 				break;
 			case 'categories':
 				$treeItem = $this->getCategoriesTree();
+				break;
+			case 'themes':
+				$treeItem = $this->getThemesTree();
 				break;
 		}
 
@@ -354,10 +358,6 @@ class MapController extends ActionController {
 			}
 			$this->addChildToThemesTree($theme->getUid(),$themeChild);
 		}
-		// ------- DEBUG START -------
-		DebugUtility::debug(__FILE__ . ' - Line: ' . __LINE__,'Debug: Markus B.  20.10.13 21:59 ');
-		DebugUtility::debug($this->getThemesTree());
-		// ------- DEBUG END -------
 	}
 	/**
 	 * get an Object an fill array with information which will be used from map marker
@@ -486,7 +486,7 @@ class MapController extends ActionController {
 	 * @return TreeItem
 	 */
 	protected function getTreeItems($label, $image = null, $uid = null) {
-		$treeItem = $this->objectManager->get('emthebi\Extgmaps\Domain\Model\TreeItem');
+		$treeItem = $this->objectManager->get('Emthebi\Extgmaps\Domain\Model\TreeItem');
 //		$treeItem = new TreeItem;
 
 		/* @var TreeItem $treeItem */

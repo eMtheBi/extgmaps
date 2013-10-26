@@ -1,5 +1,5 @@
 <?php
-namespace emthebi\extgmaps\ViewHelpers;
+namespace Emthebi\Extgmaps\ViewHelpers;
 
 	/***************************************************************
 	 *  Copyright notice
@@ -33,10 +33,10 @@ use \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
  * Add javascript files to template
  *
  * Example:
- * {namespace ext=emthebi\extgmaps\ViewHelpers}
+ * {namespace ext=Emthebi\Extgmaps\ViewHelpers}
  * <ext:javaScript src="myFile.js" footer="1"/>
  *
- * @package emthebi\extgmaps\ViewHelpers
+ * @package Emthebi\Extgmaps\ViewHelpers
  */
 class JavaScriptViewHelper extends AbstractViewHelper {
 

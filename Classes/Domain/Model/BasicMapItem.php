@@ -1,5 +1,5 @@
 <?php
-namespace emthebi\Extgmaps\Domain\Model;
+namespace Emthebi\Extgmaps\Domain\Model;
 /***************************************************************
  *  Copyright notice
  *
@@ -50,14 +50,14 @@ class BasicMapItem extends AbstractEntity  {
 	/**
 	 * tags
 	 *
-	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\emthebi\Extgmaps\Domain\Model\Tags>
+	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Emthebi\Extgmaps\Domain\Model\Tags>
 	 */
 	protected $tags;
 
 	/**
 	 * categories
 	 *
-	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\emthebi\Extgmaps\Domain\Model\Categories>
+	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Emthebi\Extgmaps\Domain\Model\Categories>
 	 */
 	protected $categories;
 
@@ -149,27 +149,27 @@ class BasicMapItem extends AbstractEntity  {
 	/**
 	 * Adds a Tags
 	 *
-	 * @param \emthebi\Extgmaps\Domain\Model\Tags $tag
+	 * @param \Emthebi\Extgmaps\Domain\Model\Tags $tag
 	 * @return void
 	 */
-	public function addTag(\emthebi\Extgmaps\Domain\Model\Tags $tag) {
+	public function addTag(\Emthebi\Extgmaps\Domain\Model\Tags $tag) {
 		$this->tags->attach($tag);
 	}
 
 	/**
 	 * Removes a Tags
 	 *
-	 * @param \emthebi\Extgmaps\Domain\Model\Tags $tagToRemove The Tags to be removed
+	 * @param \Emthebi\Extgmaps\Domain\Model\Tags $tagToRemove The Tags to be removed
 	 * @return void
 	 */
-	public function removeTag(\emthebi\Extgmaps\Domain\Model\Tags $tagToRemove) {
+	public function removeTag(\Emthebi\Extgmaps\Domain\Model\Tags $tagToRemove) {
 		$this->tags->detach($tagToRemove);
 	}
 
 	/**
 	 * Returns the tags
 	 *
-	 * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\emthebi\Extgmaps\Domain\Model\Tags> $tags
+	 * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Emthebi\Extgmaps\Domain\Model\Tags> $tags
 	 */
 	public function getTags() {
 		return $this->tags;
@@ -178,7 +178,7 @@ class BasicMapItem extends AbstractEntity  {
 	/**
 	 * Sets the tags
 	 *
-	 * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\emthebi\Extgmaps\Domain\Model\Tags> $tags
+	 * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Emthebi\Extgmaps\Domain\Model\Tags> $tags
 	 * @return void
 	 */
 	public function setTags(\TYPO3\CMS\Extbase\Persistence\ObjectStorage $tags) {
@@ -188,32 +188,32 @@ class BasicMapItem extends AbstractEntity  {
 	/**
 	 * Adds a Categories
 	 *
-	 * @param \emthebi\Extgmaps\Domain\Model\Categories $category
+	 * @param \Emthebi\Extgmaps\Domain\Model\Categories $category
 	 * @return void
 	 */
-	public function addCategories(\emthebi\Extgmaps\Domain\Model\Categories $category) {
+	public function addCategories(\Emthebi\Extgmaps\Domain\Model\Categories $category) {
 		$this->categories->attach($category);
 	}
 
 	/**
 	 * Removes a Categories
 	 *
-	 * @param \emthebi\Extgmaps\Domain\Model\Categories $categoryToRemove The Categories to be removed
+	 * @param \Emthebi\Extgmaps\Domain\Model\Categories $categoryToRemove The Categories to be removed
 	 * @return void
 	 */
-	public function removeCategories(\emthebi\Extgmaps\Domain\Model\Categories $categoryToRemove) {
+	public function removeCategories(\Emthebi\Extgmaps\Domain\Model\Categories $categoryToRemove) {
 		$this->categories->detach($categoryToRemove);
 	}
 
 	/**
-	 * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\emthebi\Extgmaps\Domain\Model\Categories> $categories
+	 * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Emthebi\Extgmaps\Domain\Model\Categories> $categories
 	 */
 	public function setCategories($categories) {
 		$this->categories = $categories;
 	}
 
 	/**
-	 * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage <\emthebi\Extgmaps\Domain\Model\Categories> $categories
+	 * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage <\Emthebi\Extgmaps\Domain\Model\Categories> $categories
 	 */
 	public function getCategories() {
 		return $this->categories;

@@ -243,6 +243,7 @@ function filterMarker() {
 			if(currentBounds.contains(mapDataJson[id].marker.position) == true) {
 				markerData = getMapMarker(id, objElement);
 			}
+			console.log('vor cats ');
 			if(mapDataJson[id].categories != null && arrayIntersect(selCats, mapDataJson[id].categories).length > 0) { //selCats.length == 0 ||
 				listClusterMarkers.push(mapDataJson[id].marker);
 			}

@@ -1,5 +1,5 @@
 <?php
-namespace emthebi\Extgmaps\Domain\Model;
+namespace Emthebi\Extgmaps\Domain\Model;
 
 /***************************************************************
  *  Copyright notice
@@ -24,7 +24,7 @@ namespace emthebi\Extgmaps\Domain\Model;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-use emthebi\Extgmaps\Domain\Model\Categories;
+	use \Emthebi\Extgmaps\Domain\Model\Categories;
 use \TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
@@ -39,7 +39,7 @@ class Themes extends BasicTreeModel {
 	/**
 	 * categories
 	 *
-	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\emthebi\Extgmaps\Domain\Model\Categories>
+	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Emthebi\Extgmaps\Domain\Model\Categories>
 	 */
 	protected $categories;
 
@@ -82,14 +82,14 @@ class Themes extends BasicTreeModel {
 	}
 
 	/**
-	 * @param ObjectStorage<\emthebi\Extgmaps\Domain\Model\Categories> $categories
+	 * @param ObjectStorage<\Emthebi\Extgmaps\Domain\Model\Categories> $categories
 	 */
 	public function setCategories($categories) {
 		$this->categories = $categories;
 	}
 
 	/**
-	 * @return ObjectStorage <\emthebi\Extgmaps\Domain\Model\Categories> $categories
+	 * @return ObjectStorage <\Emthebi\Extgmaps\Domain\Model\Categories> $categories
 	 */
 	public function getCategories() {
 		return $this->categories;

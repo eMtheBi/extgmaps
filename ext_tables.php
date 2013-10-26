@@ -205,7 +205,7 @@ $addToTca = Array(
 		'label' => 'LLL:EXT:extgmaps/Resources/Private/Language/locallang_db.xlf:tx_extgmaps_domain_model_page.map',
 		'config' => Array(
 			'type' => 'user',
-			'userFunc' => 'emthebi\\Extgmaps\\Services\\TceMap->displayMap'
+			'userFunc' => 'Emthebi\\Extgmaps\\Services\\TceMap->displayMap'
 		)
 	),
 

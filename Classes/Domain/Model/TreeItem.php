@@ -1,5 +1,5 @@
 <?php
-namespace emthebi\Extgmaps\Domain\Model;
+namespace Emthebi\Extgmaps\Domain\Model;
 
 	/***************************************************************
 	 *  Copyright notice
@@ -33,6 +33,25 @@ namespace emthebi\Extgmaps\Domain\Model;
  *
  */
 class TreeItem {
+
+	/**
+	 * @var string
+	 */
+	protected $test = 'test';
+
+	/**
+	 * @param string $test
+	 */
+	public function setTest($test) {
+		$this->test = $test;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getTest() {
+		return $this->test;
+	}
 
 	/**
 	 * @var string
