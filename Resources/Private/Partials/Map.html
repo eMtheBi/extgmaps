@@ -2,6 +2,10 @@
 <f:render partial="InfoBox"/>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<f:comment>
+    <f:debug>{themeTree}</f:debug>
+</f:comment>
+
 <script type="text/javascript">
     //    var jQuery = jQuery.noConflict();
 
@@ -17,7 +21,12 @@
 <ext:javaScript src="markerclusterer" footer="1" />
 <ext:javaScript src="extGMaps" footer="1" />
 <ext:javaScript src="tree.jquery" footer="1" />
-<ext:javaScript src="categoryTree" footer="1" />
+<ext:javaScript src="themeTree" footer="1" />
+<f:comment>
+    <ext:javaScript src="categoryTree" footer="1" />
+</f:comment>
+
+
 
 <ext:javaScript>
     var test123 = '123';
@@ -34,6 +43,33 @@
 
 <ext:css src="ContentMap" />
 <ext:css src="jqtree" />
+
+        <div class="js_newTree themeTree level0">
+            <input type="checkbox" name="category" class="js_categoryBox level0" id="theme_0" value="0">
+            <label for="theme_0">{themeTree.label}</label>
+            <div class="children">
+                <f:for each="{themeTree.children}" as="themes">
+                    <f:comment>
+                        <f:debug>{themes}</f:debug>
+                    </f:comment>
+                    <div class="themeTree level1">
+                        <input type="checkbox" name="category" class="js_categoryBox level1" id="theme_{themes.id}" value="{category.id}">
+                        <label for="theme_{themes.id}">{themes.label}</label>
+                        <div class="children">
+                            <f:for each="{themes.children}" as="category">
+                                <f:comment>
+                                    <f:debug>{category}</f:debug>
+                                </f:comment>
+                                <div class="themeTree level2 js_category js_category{category.id}" id="{category.id}">
+                                    <input type="checkbox" name="category" class="js_categoryBox level2" id="category_{category.id}" value="{category.id}">
+                                    <label for="category_{category.id}">{category.label}</label>
+                                </div>
+                            </f:for>
+                        </div>
+                    </div>
+                </f:for>
+            </div>
+        </div>
 
 <div id="js_extGMaps" class="extGMaps"></div>
 <div id="categoryTree"></div>

@@ -23,14 +23,13 @@ jQuery(function() {
 				handelStack(eventNode, 'remove');
 
 				// workaround for jqTree?:
-				var isParentSelected = categoryTree.tree('isNodeSelected', eventNode.parent);
 				// if removeFromSelection() will be used on node, the parent note lost selection: bug?
 				console.log('test1: ' + categoryTree.tree('isNodeSelected', eventNode.parent));
 				categoryTree.tree('removeFromSelection', eventNode);
 				console.log('test2: ' + categoryTree.tree('isNodeSelected', eventNode.parent));
-				if (isParentSelected) {
-					categoryTree.tree('addToSelection', eventNode.parent);
-				}
+//				if (isParentSelected) {
+//					categoryTree.tree('addToSelection', eventNode.parent);
+//				}
 				console.log('test3: ' + categoryTree.tree('isNodeSelected', eventNode.parent));
 
 				checkForSelectedSiblings(eventNode);
@@ -39,7 +38,7 @@ jQuery(function() {
 				addParents(eventNode); // jqTree bug: first sibling of current node will be selected to! why...?
 //				checkForSelectedSiblings(eventNode,true);
 				handelStack(eventNode, 'add');
-//				categoryTree.tree('addToSelection', eventNode);
+				categoryTree.tree('addToSelection', eventNode);
 				handelChildren(eventNode, 'add');
 			}
 			console.log(selCats);

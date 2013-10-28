@@ -250,6 +250,7 @@ class MapController extends ActionController {
 
 		$this->view->assign('mapDefaultGeoData', $mapDefaultGeoData);
 		$this->view->assign('mapType', $mapType);
+		$this->view->assign('themeTree', $this->getThemesTree());
 		$this->view->assign('categoriesTree', $themesTree);
 		$this->view->assign('gridSize', $gridSize);
 		$this->view->assign('mapObjectsAsJson', $mapObjectsAsJson);
