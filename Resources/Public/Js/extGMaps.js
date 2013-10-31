@@ -47,7 +47,7 @@ var infoBoxOptions = {
 //	pixelOffset: new google.maps.Size(0, 0),
 	zIndex: null,
 	boxClass: 'js_extGMapsInfobox extGMapsInfobox',
-	closeBoxMargin: "0px",
+	closeBoxMargin: "-20px",
 	closeBoxURL: "/typo3conf/ext/extgmaps/Resources/Public/Images/MapCluster/close.png",
 	infoBoxClearance: new google.maps.Size(50, 50),
 	isHidden: false,
@@ -111,9 +111,17 @@ function buildMap() {
 
 		infoBox = new InfoBox(infoBoxOptions);
 
+
 		google.maps.event.addListenerOnce(extGoogleMap, 'idle', function() {
 			setMarker();
-			filterMarker();
+			//do not use filter by use 'singleMap' plugin
+			if (extGMapType != 'singleMap') {
+				filterMarker();
+			}
+		});
+		//listener for click on map
+		google.maps.event.addListener(extGoogleMap, 'click', function() {
+			infoBox.close();
 		});
 
 		if(listMarkerClusterer) {
@@ -151,7 +159,7 @@ function getMapMarker(id, objElement) {
 		icon: image
 	});
 
-	markerData = new Object();
+	markerData = {};
 
 	markerData['title'] = objElement.title;
 	markerData['header'] = objElement.header;
@@ -160,6 +168,7 @@ function getMapMarker(id, objElement) {
 	markerData['image'] = objElement.image;
 	markerData['markerLatLng'] = markerLatLng;
 	markerData['id'] = id;
+	console.log(markerData);
 	return markerData;
 }
 
@@ -189,7 +198,7 @@ function addListenerForMarker(markerData) {
  * if listMarkerClusterer isset, clear Cluster and add new Markers,
  * else create new MarkerClusterer
  */
-function handleClustering() {
+function clustering() {
 	if(listMarkerClusterer) {
 		listMarkerClusterer.clearMarkers();
 		listMarkerClusterer.addMarkers(listClusterMarkers, false);
@@ -223,10 +232,12 @@ function setMarker() {
 		if (extGoogleMap.getZoom() > 12) {
 			extGoogleMap.setZoom(12);
 		}
-		handleClustering();
+		clustering();
 	}
 }
-
+/**
+ * filter marker array with selected checkboxes
+ */
 function filterMarker() {
 
 	if(listClusterMarkers) {
@@ -243,11 +254,10 @@ function filterMarker() {
 			if(currentBounds.contains(mapDataJson[id].marker.position) == true) {
 				markerData = getMapMarker(id, objElement);
 			}
-			console.log('vor cats ');
 			if(mapDataJson[id].categories != null && arrayIntersect(selCats, mapDataJson[id].categories).length > 0) { //selCats.length == 0 ||
 				listClusterMarkers.push(mapDataJson[id].marker);
 			}
-			if(mapDataJson[id].tags != null && arrayIntersect(selTags, mapDataJson[id].categories).length > 0) { //selCats.length == 0 ||
+			if(mapDataJson[id].tags != null && arrayIntersect(selTags, mapDataJson[id].tags).length > 0) { //selCats.length == 0 ||
 				listClusterMarkers.push(mapDataJson[id].marker);
 			}
 			if(mapDataJson[id].tags != null && arrayIntersect(selTypes, mapDataJson[id].categories).length > 0) { //selCats.length == 0 ||
@@ -258,13 +268,22 @@ function filterMarker() {
 			}
 
 		});
-		extGoogleMap.fitBounds(bounds);
-		handleClustering();
+
+		// set map to with bounds for current marker
+//		extGoogleMap.fitBounds(bounds);
+
+		clustering();
 	}
 }
 
-function arrayIntersect(a, b) {
-	return a.filter(function(i) {
-		return b.indexOf(i) > -1;
+/**
+ * arrayIntersect function
+ * @param arrayToFilter
+ * @param mapMarker
+ * @returns {filter|*|filter|filter|filter|filter}
+ */
+function arrayIntersect(arrayToFilter, mapMarker) {
+	return arrayToFilter.filter(function(i) {
+		return mapMarker.indexOf(i) > -1;
 	});
 }

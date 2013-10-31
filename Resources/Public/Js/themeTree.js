@@ -1,55 +1,42 @@
-/**
- * Created by markus on 27.10.13.
- */
-jQuery(function(){
-	console.log('test');
-
-});
-
 jQuery('.js_categoryBox').click(function(){
 	// use closest and not parent
 	// because user can modify dom with jQuery uniform
-	var currentTreeDiv = jQuery(this).closest('div.themeTree');
+	var currentTreeDiv = jQuery(this).closest('div.js_themeTree');
 	var currentLevel = 0;
 	var treeDivClasses = currentTreeDiv.attr('class');
-	var level = treeDivClasses.match(/(level)(\d)/);
+	var level = treeDivClasses.match(/(js_level)(\d)/);
+
 	if (level.length == 3) {
 		currentLevel = parseInt(level[2]);
 	}
 
 	var parentLevel = currentLevel - 1;
 
-	var parentTree = jQuery(currentTreeDiv).closest('div.level' + parentLevel);
+	var parentTree = jQuery(currentTreeDiv).closest('div.js_level' + parentLevel);
 
-	var currentTreeDivState = jQuery(currentTreeDiv).find('.level' + currentLevel + ':checkbox').is(':checked');
+	var currentTreeDivState = jQuery(currentTreeDiv).find('.js_level' + currentLevel + ':checkbox').is(':checked');
 	var currentId = parseInt(jQuery(this).val());
+
 	if (currentTreeDivState === true) {
+		// checkbox is now selected
+
 		if (currentId != '') {
 			handelStack(currentId,'add');
 		}
+
 		checkParents(parentTree,parentLevel);
 		checkChildren(currentTreeDiv);
 	} else {
+		// checkbox is now unselected
+
+		//close infoBox
+		infoBox.close();
 		if (currentId != '') {
 			handelStack(currentId,'remove');
 		}
 		unCheckChildren(currentTreeDiv);
 	}
-
-	//	var siblings = currentTreeDiv.siblings();
-//	console.log(siblings);
-//	var allSiblingsChecked = true;
-//	jQuery(siblings).each(function(){
-//		if (!jQuery(this).find(':checkbox').is(':checked')) {
-//			allSiblingsChecked = false;
-//		}
-//	});
-//	console.log(allSiblingsChecked);
-
-//	if (currentTreeDivState == false && allSiblingsChecked == false) {
-//		console.log('remove parent');
-//	}
-
+	// filter for selected checkboxes
 	filterMarker();
 });
 
@@ -59,10 +46,10 @@ jQuery('.js_categoryBox').click(function(){
  * @param parentLevel
  */
 function checkParents(parentTree,parentLevel) {
-	parentTree.find('.level' + parentLevel + ':checkbox').attr('checked','checked');
+	parentTree.find('.js_level' + parentLevel + ':checkbox').attr('checked','checked');
 	if (parentLevel > 0) {
 		parentLevel--;
-		var nextParent = jQuery(parentTree).closest('div.level' + parentLevel);
+		var nextParent = jQuery(parentTree).closest('div.js_level' + parentLevel);
 		checkParents(nextParent,parentLevel)
 	}
 
@@ -106,4 +93,22 @@ function handelStack(currentId, addOrRemove) {
 				selCats.splice(selCats.indexOf(currentId), 1);
 			}
 		}
+}
+
+// old code for check of inactive siblings
+function removeParents() {
+
+	//	var siblings = currentTreeDiv.siblings();
+//	console.log(siblings);
+//	var allSiblingsChecked = true;
+//	jQuery(siblings).each(function(){
+//		if (!jQuery(this).find(':checkbox').is(':checked')) {
+//			allSiblingsChecked = false;
+//		}
+//	});
+//	console.log(allSiblingsChecked);
+
+//	if (currentTreeDivState == false && allSiblingsChecked == false) {
+//		console.log('remove parent');
+//	}
 }

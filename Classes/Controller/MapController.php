@@ -190,6 +190,7 @@ class MapController extends ActionController {
 		$this->view->assign('mapType', $mapType);
 		$this->view->assign('gridSize', $gridSize);
 		$this->view->assign('mapObjectsAsJson', $mapObjectsAsJson);
+		$this->view->assign('extGMapType',$this->request->getControllerActionName());
 	}
 
 	/**
@@ -244,16 +245,16 @@ class MapController extends ActionController {
 		$mapType = $this->getGoogleMapType();
 		$mapObjectsAsJson = json_encode($mapObjects);
 
-		$tagsTree = $this->getTreeAsJson('tags');
-		$categoriesTree = $this->getTreeAsJson('categories');
-		$themesTree = $this->getTreeAsJson('themes');
+//		$tagsTree = $this->getTreeAsJson('tags');
+//		$categoriesTree = $this->getTreeAsJson('categories');
+//		$themesTree = $this->getTreeAsJson('themes');
 
 		$this->view->assign('mapDefaultGeoData', $mapDefaultGeoData);
 		$this->view->assign('mapType', $mapType);
 		$this->view->assign('themeTree', $this->getThemesTree());
-		$this->view->assign('categoriesTree', $themesTree);
 		$this->view->assign('gridSize', $gridSize);
 		$this->view->assign('mapObjectsAsJson', $mapObjectsAsJson);
+		$this->view->assign('extGMapType',$this->request->getControllerActionName());
 	}
 
 	/**
@@ -344,6 +345,9 @@ class MapController extends ActionController {
 	 */
 	protected function getAllowedIdsFromFlexForm($flexFormData) {
 		$ids = explode(',', $flexFormData);
+		if (count($ids) == 1 && empty($ids[0])) {
+			$ids = array();
+		}
 		return $ids;
 	}
 

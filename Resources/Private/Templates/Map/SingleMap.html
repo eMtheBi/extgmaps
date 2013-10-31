@@ -1,8 +1,13 @@
 {namespace ext=Emthebi\Extgmaps\ViewHelpers}
 <f:layout name="Default" />
 <f:section name="main">
+    <ext:css>
+        .map {
+            height: 300px;
+        }
+    </ext:css>
     <ext:javaScript footer="1">
-        var extGMapType = 'singleMap';
+        var extGMapType = '{extGMapType}';
     </ext:javaScript>
     <f:render partial="Map" arguments="{_all}"/>
 </f:section>
