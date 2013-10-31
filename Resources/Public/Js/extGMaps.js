@@ -55,6 +55,11 @@ var infoBoxOptions = {
 	enableEventPropagation: false
 };
 
+
+jQuery(document).ready(function() {
+	buildMap();
+});
+
 /**
  *
  * @param mapType
@@ -87,10 +92,11 @@ function buildMap() {
 
 		bounds = new google.maps.LatLngBounds();
 
+		var mapOptions = {};
 		switch(extGMapType) {
 			case 'contentMap':
 			case 'singleMap':
-				var mapOptions = {
+				mapOptions = {
 					zoom: 12,
 					center: myLatLng,
 					mapTypeId: getMapType(mapType),
@@ -99,7 +105,7 @@ function buildMap() {
 				};
 				break;
 			case 'fullSizeMap':
-				var mapOptions = {
+				mapOptions = {
 					zoom: 8,
 					center: myLatLng,
 					mapTypeId: getMapType(mapType)
@@ -130,10 +136,6 @@ function buildMap() {
 		extGoogleMapLoaded = true;
 	}
 }
-
-jQuery(document).ready(function() {
-	buildMap();
-});
 
 /**
  * create an markerData Object with some information needed for show marker on map
@@ -198,7 +200,7 @@ function addListenerForMarker(markerData) {
  * if listMarkerClusterer isset, clear Cluster and add new Markers,
  * else create new MarkerClusterer
  */
-function clustering() {
+function doClustering() {
 	if(listMarkerClusterer) {
 		listMarkerClusterer.clearMarkers();
 		listMarkerClusterer.addMarkers(listClusterMarkers, false);
@@ -232,7 +234,7 @@ function setMarker() {
 		if (extGoogleMap.getZoom() > 12) {
 			extGoogleMap.setZoom(12);
 		}
-		clustering();
+		doClustering();
 	}
 }
 /**
@@ -272,7 +274,7 @@ function filterMarker() {
 		// set map to with bounds for current marker
 //		extGoogleMap.fitBounds(bounds);
 
-		clustering();
+		doClustering();
 	}
 }
 
