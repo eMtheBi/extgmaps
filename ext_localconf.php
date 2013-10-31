@@ -35,12 +35,12 @@ if (!defined('TYPO3_MODE')) {
 	'emthebi.' . $_EXTKEY,
 	'Map',
 	array(
-		'Map' => '',
+		'Map' => 'fullSizeMap',
 		
 	),
 	// non-cacheable actions
 	array(
-		'Map' => '',
+		'Map' => 'fullSizeMap',
 		
 	)
 );

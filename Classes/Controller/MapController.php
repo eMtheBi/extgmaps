@@ -33,6 +33,7 @@ use \Emthebi\Extgmaps\Domain\Model\BasicTreeModel;
 use \Emthebi\Extgmaps\Domain\Model\Content;
 use \Emthebi\Extgmaps\Domain\Model\TreeItem;
 use \Emthebi\Extgmaps\Domain\Model\Categories;
+use \Emthebi\Extgmaps\Domain\Model\BasicMapItem;
 use \Emthebi\Extgmaps\Domain\Model\Themes;
 use \Emthebi\Extgmaps\Domain\Repository;
 use \Emthebi\Extgmaps\Domain\Repository\ContentRepository;
@@ -256,6 +257,46 @@ class MapController extends ActionController {
 		$this->view->assign('mapObjectsAsJson', $mapObjectsAsJson);
 		$this->view->assign('extGMapType',$this->request->getControllerActionName());
 	}
+	/**
+	 * Action for map which has to be placed on pages
+	 */
+	public function fullSizeMapAction() {
+
+		$this->createThemeTree();
+
+		$mapDefaultGeoData = $this->getDefaultGeoCoordinates();
+
+		$mapObjects = array();
+		$pagesWithGeoInformation = $this->pageRepository->findAllWithGeoData(null, $this->configurationManager->getContentObject()->data['pid']);
+		$contentElementsWithGeoInformation = $this->contentRepository->findAllWithGeoData($this->configurationManager->getContentObject()->data['pid']);
+		$allowedIds = array();
+		$allowedIds['categories'] = $this->getAllowedIdsFromFlexForm($this->settings['flexFormCategories']);
+		$allowedIds['tags'] = $this->getAllowedIdsFromFlexForm($this->settings['flexFormTags']);
+
+		foreach($pagesWithGeoInformation as $pageWithGeoInformation) {
+			/* @var Page $pageWithGeoInformation */
+			$mapObjects[] = $this->fillMapObject($pageWithGeoInformation, $allowedIds);
+		}
+		foreach($contentElementsWithGeoInformation as $contentElementWithGeoInformation) {
+			/* @var Content $contentElementWithGeoInformation */
+			$mapObjects[] = $this->fillMapObject($contentElementWithGeoInformation, $allowedIds);
+		}
+
+		$gridSize = $this->getContentMapGridSize();
+		$mapType = $this->getGoogleMapType();
+		$mapObjectsAsJson = json_encode($mapObjects);
+
+//		$tagsTree = $this->getTreeAsJson('tags');
+//		$categoriesTree = $this->getTreeAsJson('categories');
+//		$themesTree = $this->getTreeAsJson('themes');
+
+		$this->view->assign('mapDefaultGeoData', $mapDefaultGeoData);
+		$this->view->assign('mapType', $mapType);
+		$this->view->assign('themeTree', $this->getThemesTree());
+		$this->view->assign('gridSize', $gridSize);
+		$this->view->assign('mapObjectsAsJson', $mapObjectsAsJson);
+		$this->view->assign('extGMapType',$this->request->getControllerActionName());
+	}
 
 	/**
 	 * @param string $type
@@ -338,8 +379,7 @@ class MapController extends ActionController {
 	}
 
 	/**
-	 * @param $type
-	 * @param $flexFormData
+	 * @param array $flexFormData
 	 *
 	 * @return array
 	 */
@@ -369,14 +409,14 @@ class MapController extends ActionController {
 	 *
 	 * use TypoScript mapping settings to read properties from given object
 	 *
-	 * @param $currentObject
+	 * @param BasicMapItem $currentObject
 	 *
-	 * @Param array $allowedIds
+	 * @param array $allowedIds
 	 *
 	 * @return array
 	 * @throws \TYPO3\CMS\Extbase\Exception
 	 */
-	protected function fillMapObject($currentObject, $allowedIds = array()) {
+	protected function fillMapObject(BasicMapItem $currentObject, $allowedIds = array()) {
 		$useFAL = false;
 		$tableName = '';
 
@@ -426,7 +466,11 @@ class MapController extends ActionController {
 								$fileObject = $fileObjects[0];
 								/* @var \TYPO3\CMS\Core\Resource\FileReference $fileObject */
 //								$objectValue = $fileObject->getPublicUrl();
-								$objectValue = $this->createInfoBoxImage($fileObject->getPublicUrl(), $currentObject->getTitle());
+								if ($currentObject->_hasProperty('title')) {
+									$objectValue = $this->createInfoBoxImage($fileObject->getPublicUrl(), $currentObject->getTitle());
+								} else {
+									$objectValue = $this->createInfoBoxImage($fileObject->getPublicUrl());
+								}
 							}
 						}
 						break;
@@ -623,7 +667,7 @@ class MapController extends ActionController {
 	 *
 	 * @return string img tag
 	 */
-	public function createInfoBoxImage($imagePath, $title) {
+	public function createInfoBoxImage($imagePath, $title = '') {
 		$imageTag = '';
 
 		if(isset($this->settings['infoBoxImageSize']) && !empty($this->settings['infoBoxImageSize'])) {

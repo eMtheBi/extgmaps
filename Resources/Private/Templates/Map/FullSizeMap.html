@@ -1,8 +1,10 @@
 {namespace ext=Emthebi\Extgmaps\ViewHelpers}
-<f:layout name="Default" />
+<f:layout name="FullSizeMap" />
 <f:section name="main">
+
+    <ext:css src="ContentMap" />
     <ext:javaScript footer="1">
-        var extGMapType = 'fullSizeMap';
+        var extGMapType = 'extGMapType';
     </ext:javaScript>
     <f:render partial="Map" arguments="{_all}"/>
 </f:section>
