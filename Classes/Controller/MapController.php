@@ -227,7 +227,7 @@ class MapController extends ActionController {
 		$mapDefaultGeoData = $this->getDefaultGeoCoordinates();
 
 		$mapObjects = array();
-		$pagesWithGeoInformation = $this->pageRepository->findAllWithGeoData(null, $this->configurationManager->getContentObject()->data['pid']);
+		$pagesWithGeoInformation = $this->pageRepository->findAllWithGeoData($this->configurationManager->getContentObject()->data['uid']);
 		$contentElementsWithGeoInformation = $this->contentRepository->findAllWithGeoData($this->configurationManager->getContentObject()->data['pid']);
 		$allowedIds = array();
 		$allowedIds['categories'] = $this->getAllowedIdsFromFlexForm($this->settings['flexFormCategories']);
@@ -245,10 +245,6 @@ class MapController extends ActionController {
 		$gridSize = $this->getContentMapGridSize();
 		$mapType = $this->getGoogleMapType();
 		$mapObjectsAsJson = json_encode($mapObjects);
-
-//		$tagsTree = $this->getTreeAsJson('tags');
-//		$categoriesTree = $this->getTreeAsJson('categories');
-//		$themesTree = $this->getTreeAsJson('themes');
 
 		$this->view->assign('mapDefaultGeoData', $mapDefaultGeoData);
 		$this->view->assign('mapType', $mapType);
@@ -267,8 +263,8 @@ class MapController extends ActionController {
 		$mapDefaultGeoData = $this->getDefaultGeoCoordinates();
 
 		$mapObjects = array();
-		$pagesWithGeoInformation = $this->pageRepository->findAllWithGeoData(null, $this->configurationManager->getContentObject()->data['pid']);
-		$contentElementsWithGeoInformation = $this->contentRepository->findAllWithGeoData($this->configurationManager->getContentObject()->data['pid']);
+		$pagesWithGeoInformation = $this->pageRepository->findAllWithGeoData();
+		$contentElementsWithGeoInformation = $this->contentRepository->findAllWithGeoData();
 		$allowedIds = array();
 		$allowedIds['categories'] = $this->getAllowedIdsFromFlexForm($this->settings['flexFormCategories']);
 		$allowedIds['tags'] = $this->getAllowedIdsFromFlexForm($this->settings['flexFormTags']);
@@ -286,78 +282,12 @@ class MapController extends ActionController {
 		$mapType = $this->getGoogleMapType();
 		$mapObjectsAsJson = json_encode($mapObjects);
 
-//		$tagsTree = $this->getTreeAsJson('tags');
-//		$categoriesTree = $this->getTreeAsJson('categories');
-//		$themesTree = $this->getTreeAsJson('themes');
-
 		$this->view->assign('mapDefaultGeoData', $mapDefaultGeoData);
 		$this->view->assign('mapType', $mapType);
 		$this->view->assign('themeTree', $this->getThemesTree());
 		$this->view->assign('gridSize', $gridSize);
 		$this->view->assign('mapObjectsAsJson', $mapObjectsAsJson);
 		$this->view->assign('extGMapType',$this->request->getControllerActionName());
-	}
-
-	/**
-	 * @param string $type
-	 *
-	 * @return string
-	 */
-	protected function getTreeAsJson($type) {
-		$treeItem = null;
-		switch($type) {
-			case 'tags':
-				$treeItem = $this->getTagsTree();
-				break;
-			case 'categories':
-				$treeItem = $this->getCategoriesTree();
-				break;
-			case 'themes':
-				$treeItem = $this->getThemesTree();
-				break;
-		}
-
-		$treeAsJson = null;
-
-		/* @var TreeItem $treeItem */
-		$treeAsArray = $this->getTreeChildren($treeItem);
-		$treeAsJson = json_encode($treeAsArray);
-
-		return $treeAsJson;
-	}
-
-	/**
-	 * helper function to get recursive all children items
-	 *
-	 * @param TreeItem $tree
-	 * @param int      $deep
-	 *
-	 * @return array
-	 */
-	protected function getTreeChildren(TreeItem $tree, $deep = 0) {
-		$properties = $tree->_getProperties();
-		$children = array();
-		if($deep == 0) {
-			// only on first call
-			foreach($properties['children'] as $treeChild) {
-				/* @var TreeItem $treeChild */
-				$childProperties = $this->getTreeChildren($treeChild);
-				$children[] = $childProperties;
-			}
-		}
-
-		$deep++;
-
-		if(empty($children) && array_key_exists($properties['label'], $this->thirdLevelTreeItems)) {
-			$itemArray = $this->thirdLevelTreeItems[$properties['label']];
-			foreach($itemArray as $treeItem) {
-				if($deep < 2) {
-					$children[] = $this->getTreeChildren($treeItem, $deep);
-				}
-			}
-		}
-		$properties['children'] = $children;
-		return $properties;
 	}
 
 	/**

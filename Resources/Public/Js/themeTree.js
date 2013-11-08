@@ -1,4 +1,4 @@
-jQuery('.js_categoryBox').click(function(){
+jQuery('.js_categoryBox').click(function() {
 	// use closest and not parent
 	// because user can modify dom with jQuery uniform
 	var currentTreeDiv = jQuery(this).closest('div.js_themeTree');
@@ -6,7 +6,7 @@ jQuery('.js_categoryBox').click(function(){
 	var treeDivClasses = currentTreeDiv.attr('class');
 	var level = treeDivClasses.match(/(js_level)(\d)/);
 
-	if (level.length == 3) {
+	if(level.length == 3) {
 		currentLevel = parseInt(level[2]);
 	}
 
@@ -16,41 +16,56 @@ jQuery('.js_categoryBox').click(function(){
 
 	var currentTreeDivState = jQuery(currentTreeDiv).find('.js_level' + currentLevel + ':checkbox').is(':checked');
 	var currentId = parseInt(jQuery(this).val());
-
-	if (currentTreeDivState === true) {
+	if(currentTreeDivState === true) {
 		// checkbox is now selected
 
-		if (currentId != '') {
-			handelStack(currentId,'add');
-		}
+		if(jQuery(this).attr('id') == 'js_showAll') {
+			// special case for show all checkbox
+			showAllMarker();
+		} else {
+			unCheckShowAll();
+			if(currentId != '') {
+				handelStack(currentId, 'add');
+			}
 
-		checkParents(parentTree,parentLevel);
-		checkChildren(currentTreeDiv);
+			checkParents(parentTree, parentLevel);
+			checkChildren(currentTreeDiv);
+		}
 	} else {
 		// checkbox is now unselected
 
 		//close infoBox
 		infoBox.close();
-		if (currentId != '') {
-			handelStack(currentId,'remove');
+		if(currentId != '') {
+			handelStack(currentId, 'remove');
 		}
+		unCheckShowAll();
+
+		removeParents(currentTreeDiv, parentLevel);
 		unCheckChildren(currentTreeDiv);
 	}
-	// filter for selected checkboxes
-	filterMarker();
+	// filter for selected checkboxes (exclude #js_showAll)
+	if(jQuery(this).attr('id') != 'js_showAll') {
+		filterMarker();
+	}
 });
+
+function unCheckShowAll() {
+	jQuery('#js_showAll:checkbox').attr('checked', false);
+	filterMarker();
+}
 
 /**
  * select all parents
  * @param parentTree
  * @param parentLevel
  */
-function checkParents(parentTree,parentLevel) {
-	parentTree.find('.js_level' + parentLevel + ':checkbox').attr('checked','checked');
-	if (parentLevel > 0) {
+function checkParents(parentTree, parentLevel) {
+	parentTree.find('.js_level' + parentLevel + ':checkbox').attr('checked', 'checked');
+	if(parentLevel > 0) {
 		parentLevel--;
 		var nextParent = jQuery(parentTree).closest('div.js_level' + parentLevel);
-		checkParents(nextParent,parentLevel)
+		checkParents(nextParent, parentLevel)
 	}
 
 }
@@ -60,10 +75,10 @@ function checkParents(parentTree,parentLevel) {
  * @param currentTreeDiv
  */
 function unCheckChildren(currentTreeDiv) {
-	currentTreeDiv.find('.children').find(':checkbox').attr('checked',false);
-	currentTreeDiv.find('.children').find(':checkbox').each(function(){
+	currentTreeDiv.find('.children').find(':checkbox').attr('checked', false);
+	currentTreeDiv.find('.children').find(':checkbox').each(function() {
 		var currentId = parseInt(jQuery(this).val());
-		handelStack(currentId,'remove');
+		handelStack(currentId, 'remove');
 	});
 }
 /**
@@ -71,10 +86,10 @@ function unCheckChildren(currentTreeDiv) {
  * @param currentTreeDiv
  */
 function checkChildren(currentTreeDiv) {
-	currentTreeDiv.find('.children').find(':checkbox').attr('checked',true);
-	currentTreeDiv.find('.children').find(':checkbox').each(function(){
+	currentTreeDiv.find('.children').find(':checkbox').attr('checked', true);
+	currentTreeDiv.find('.children').find(':checkbox').each(function() {
 		var currentId = parseInt(jQuery(this).val());
-		handelStack(currentId,'add');
+		handelStack(currentId, 'add');
 	});
 }
 
@@ -84,31 +99,41 @@ function checkChildren(currentTreeDiv) {
  * @param addOrRemove
  */
 function handelStack(currentId, addOrRemove) {
-		if(addOrRemove == 'add') {
-			if(selCats.indexOf(currentId) === -1 && !isNaN(currentId)) {
-				selCats.push(currentId);
-			}
-		} else {
-			while(selCats.indexOf(currentId) !== -1) {
-				selCats.splice(selCats.indexOf(currentId), 1);
-			}
+	if(addOrRemove == 'add') {
+		if(selCats.indexOf(currentId) === -1 && !isNaN(currentId)) {
+			selCats.push(currentId);
 		}
+	} else {
+		while(selCats.indexOf(currentId) !== -1) {
+			selCats.splice(selCats.indexOf(currentId), 1);
+		}
+	}
 }
 
-// old code for check of inactive siblings
-function removeParents() {
+/**
+ * unset parent checkBox if all siblings are unchecked or no siblings exists
+ * @param currentTreeDiv
+ * @param parentLevel
+ */
+function removeParents(currentTreeDiv, parentLevel) {
 
-	//	var siblings = currentTreeDiv.siblings();
-//	console.log(siblings);
-//	var allSiblingsChecked = true;
-//	jQuery(siblings).each(function(){
-//		if (!jQuery(this).find(':checkbox').is(':checked')) {
-//			allSiblingsChecked = false;
-//		}
-//	});
-//	console.log(allSiblingsChecked);
+	var siblings = currentTreeDiv.siblings();
+	var allSiblingsChecked = true;
 
-//	if (currentTreeDivState == false && allSiblingsChecked == false) {
-//		console.log('remove parent');
-//	}
+	if(siblings.length > 0) {
+		jQuery(siblings).each(function() {
+			if(!jQuery(this).find(':checkbox').is(':checked')) {
+				allSiblingsChecked = false;
+			}
+		});
+	} else {
+		// no siblings exists
+		allSiblingsChecked = false;
+	}
+
+	// unset parent checkBox
+	if(allSiblingsChecked == false) {
+		var parentDiv = jQuery(currentTreeDiv).closest('.js_level' + parentLevel);
+		parentDiv.find('.js_level' + parentLevel + ':checkbox').attr('checked', false);
+	}
 }

@@ -55,11 +55,6 @@ var infoBoxOptions = {
 	enableEventPropagation: false
 };
 
-
-jQuery(document).ready(function() {
-	buildMap();
-});
-
 /**
  *
  * @param mapType
@@ -170,7 +165,6 @@ function getMapMarker(id, objElement) {
 	markerData['image'] = objElement.image;
 	markerData['markerLatLng'] = markerLatLng;
 	markerData['id'] = id;
-	console.log(markerData);
 	return markerData;
 }
 
@@ -237,6 +231,7 @@ function setMarker() {
 		doClustering();
 	}
 }
+
 /**
  * filter marker array with selected checkboxes
  */
@@ -274,6 +269,37 @@ function filterMarker() {
 		// set map to with bounds for current marker
 //		extGoogleMap.fitBounds(bounds);
 
+		doClustering();
+	}
+}
+
+/**
+ * show all markers
+ */
+function showAllMarker() {
+
+	if(listClusterMarkers) {
+		listMarkerClusterer.clearMarkers();
+	}
+	listClusterMarkers = [];
+
+	currentBounds = extGoogleMap.getBounds();
+	if(extGoogleMapLoaded == true) {
+		listClusterMarkers = [];
+		jQuery.each(mapDataJson, function(id, objElement) {
+			var markerData = false;
+			mapDataJson[id].marker.setMap(null);
+			if(currentBounds.contains(mapDataJson[id].marker.position) == true) {
+				markerData = getMapMarker(id, objElement);
+			}
+
+			listClusterMarkers.push(mapDataJson[id].marker);
+			if(markerData) {
+				addListenerForMarker(markerData);
+			}
+
+		});
+		// set map to with bounds for current marker
 		doClustering();
 	}
 }

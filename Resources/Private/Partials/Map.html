@@ -1,7 +1,6 @@
 {namespace ext=Emthebi\Extgmaps\ViewHelpers}
 <f:render partial="InfoBox"/>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <f:comment>
     <f:debug>{themeTree}</f:debug>
 </f:comment>
@@ -25,10 +24,12 @@
 
 
 <ext:javaScript>
-    var test123 = '123';
+    //var test123 = '123';
 </ext:javaScript>
 <ext:javaScript footer="1">
-
+    jQuery(document).ready(function() {
+        buildMap();
+    });
 
 </ext:javaScript>
 
@@ -36,4 +37,4 @@
     <f:render partial="Tree" arguments="{_all}" />
 </f:if>
 
-<div id="js_extGMaps" class="map"></div>
+<div id="js_extGMaps" class="map {extGMapType}"></div>

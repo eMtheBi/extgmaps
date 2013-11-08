@@ -66,6 +66,10 @@
 				<source>detailLink</source>
 			</trans-unit>
 
+			<trans-unit id="allMarker">
+				<source>show all</source>
+			</trans-unit>
+
 		</body>
 	</file>
 </xliff>

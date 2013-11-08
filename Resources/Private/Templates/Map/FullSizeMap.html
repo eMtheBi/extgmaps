@@ -2,9 +2,43 @@
 <f:layout name="FullSizeMap" />
 <f:section name="main">
 
-    <ext:css src="ContentMap" />
+    <ext:css src="FullScreenMap" />
     <ext:javaScript footer="1">
         var extGMapType = 'extGMapType';
     </ext:javaScript>
-    <f:render partial="Map" arguments="{_all}"/>
+
+    <ext:css src="Map"/>
+    <ext:css>
+        #logo {
+        position:relative!important;
+        }
+    </ext:css>
+    <ext:javaScript src="infobox" footer="1" />
+    <ext:javaScript src="markerclusterer" footer="1" />
+    <ext:javaScript src="extGMaps" footer="1" />
+    <ext:javaScript src="themeTree" footer="1" />
+    <ext:javaScript src="fullSizeMap" footer="1" />
+
+    <div class="js_fullSizeMapContainer" style="display:none">
+        <f:render partial="InfoBox"/>
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+
+        <script type="text/javascript">
+
+            var mapDataJson = {mapObjectsAsJson -> f:format.htmlentitiesDecode()};
+            var defaultGeoCoordinates = {mapDefaultGeoData -> f:format.htmlentitiesDecode()};
+            var gridSize = '{gridSize}';
+            var mapType = '{mapType}';
+
+        </script>
+
+
+
+        <f:render partial="Tree" arguments="{_all}" />
+
+
+        <div id="js_extGMaps" class="map {extGMapType}"></div>
+    </div>
+    <div class="js_toogleMapContainer">show Map</div>
+    <div class="js_fullScreeButton fullScreeButton"><f:image src="{f:uri.resource(path:'Images/fullscreen.png')}" alt=""/></div>
 </f:section>
