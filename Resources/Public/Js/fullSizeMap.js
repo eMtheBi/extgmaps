@@ -1,28 +1,33 @@
 var mapIsInitialised = false;
+var scrollPosition = 0;
 jQuery('.js_toogleMapContainer').click(function() {
 
+
+	scrollPosition = jQuery(window).scrollTop();
 	if(mapIsInitialised === false) {
 		resizeMap(true);
 		buildMap();
 	}
-	jQuery('.js_fullSizeMapContainer').fadeIn();
-	jQuery('.js_fullScreeButton').fadeIn();
+	jQuery('.js_fullSizeMapContainer').show();
+	jQuery('.js_fullScreeButton').show();
+	jQuery(window).scrollTop(0);
 	mapIsInitialised = true;
 });
 
-
 jQuery('.js_fullScreeButton').click(function() {
-	jQuery('.js_fullScreeButton').fadeOut();
-	jQuery('.js_fullSizeMapContainer').fadeOut();
+	jQuery(window).scrollTop(scrollPosition);
+	jQuery('.js_fullScreeButton').hide();
+	jQuery('.js_fullSizeMapContainer').hide();
 });
 
 jQuery(window).resize(function() {
 	resizeMap(false);
 });
 
+
+
 function resizeMap(firstCall) {
 	var currentSiteOffset = jQuery('.extgmaps').offset();
-
 
 	jQuery('.js_fullScreeButton,.themeTree').css({
 		"left": jQuery(window).width()-340
