@@ -23,8 +23,23 @@
 	z-index:21;
 	position:absolute;
 	/*left:285px;*/
+	/*top:60px;*/
+	width:150px;
+}
+
+.treeSlider {
+
+	z-index:21;
+	position:absolute;
 	top:60px;
 	width:150px;
+
+
+}
+
+.sliderImg {
+	left: -20px;
+	position: absolute;
 }
 
 .contentMap {
