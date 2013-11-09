@@ -8,11 +8,6 @@
     </ext:javaScript>
 
     <ext:css src="Map"/>
-    <ext:css>
-        #logo {
-        position:relative!important;
-        }
-    </ext:css>
     <ext:javaScript src="infobox" footer="1" />
     <ext:javaScript src="markerclusterer" footer="1" />
     <ext:javaScript src="extGMaps" footer="1" />
@@ -39,6 +34,6 @@
 
         <div id="js_extGMaps" class="map {extGMapType}"></div>
     </div>
-    <div class="js_toogleMapContainer">show Map</div>
+    <div class="js_toogleMapContainer"><f:image src="{f:uri.resource(path:'Images/globe.png')}" alt=""/></div>
     <div class="js_fullScreeButton fullScreeButton"><f:image src="{f:uri.resource(path:'Images/fullscreen.png')}" alt=""/></div>
 </f:section>

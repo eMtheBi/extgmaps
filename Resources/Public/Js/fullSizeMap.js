@@ -12,7 +12,6 @@ jQuery('.js_toogleMapContainer').click(function() {
 
 
 jQuery('.js_fullScreeButton').click(function() {
-//	catdiv.fadeOut();
 	jQuery('.js_fullScreeButton').fadeOut();
 	jQuery('.js_fullSizeMapContainer').fadeOut();
 });
@@ -24,14 +23,10 @@ jQuery(window).resize(function() {
 function resizeMap(firstCall) {
 	var currentSiteOffset = jQuery('.extgmaps').offset();
 
-	jQuery('.js_fullScreeButton ').css({
-		"left": jQuery(window).width()-currentSiteOffset.left-180
+
+	jQuery('.js_fullScreeButton,.themeTree').css({
+		"left": jQuery(window).width()-340
 	}).show();
-
-	jQuery('.themeTree ').css({
-		"left": jQuery(window).width()-currentSiteOffset.left-180
-	});
-
 
 	jQuery('#js_extGMaps').css({
 		"width":jQuery(window).width(),
