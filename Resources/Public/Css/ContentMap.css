@@ -23,8 +23,9 @@
 	color:#fff;
 	z-index:21;
 	position:absolute;
-	left:285px;
-	top:5px;
+	/*left:285px;*/
+	/*top:5px;*/
+	width:150px;
 }
 
 .contentMap {
@@ -32,4 +33,18 @@
 	height:450px;
 	position:absolute;
 	z-index:20;
+}
+
+.treeSlider {
+
+	z-index:21;
+	position:absolute;
+	top:60px;
+	width:150px;
+	left:300px;
+}
+
+.sliderImg {
+	left: -20px;
+	position: absolute;
 }

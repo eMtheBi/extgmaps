@@ -6,29 +6,24 @@
 </f:comment>
 <ext:css src="Map"/>
 
-<script type="text/javascript">
-    //    var jQuery = jQuery.noConflict();
-
+<ext:javaScript>
     var mapDataJson = {mapObjectsAsJson -> f:format.htmlentitiesDecode()};
     var defaultGeoCoordinates = {mapDefaultGeoData -> f:format.htmlentitiesDecode()};
     var gridSize = '{gridSize}';
     var mapType = '{mapType}';
-
-</script>
+</ext:javaScript>
 
 <ext:javaScript src="infobox" footer="1" />
 <ext:javaScript src="markerclusterer" footer="1" />
 <ext:javaScript src="extGMaps" footer="1" />
 <ext:javaScript src="themeTree" footer="1" />
 
-
-
-<ext:javaScript>
-    //var test123 = '123';
-</ext:javaScript>
 <ext:javaScript footer="1">
     jQuery(document).ready(function() {
         buildMap();
+        if (disableMapScrolling) {
+            extGoogleMap.setOptions({scrollwheel: false});
+        }
     });
 
 </ext:javaScript>

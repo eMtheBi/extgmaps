@@ -16,9 +16,7 @@ jQuery('.js_toogleMapContainer').click(function() {
 	}
 	jQuery('.js_fullSizeMapContainer').show();
 
-	jQuery('.sliderImg').css({
-		"top": (jQuery('.js_themeTree').outerHeight()-jQuery('.js_sliderImg').outerHeight())/2 + 'px'
-	});
+	setArrowSliderPosition();
 
 	jQuery('.js_fullScreeButton').show();
 
@@ -82,43 +80,9 @@ function resizeMap(firstCall) {
 	if(!firstCall) {
 		google.maps.event.trigger(extGoogleMap, "resize");
 	}
+
+	currentSiteOffset = jQuery('.extgmaps').offset();
+	treeSliderSlideOut = jQuery(window).width() - currentSiteOffset.left + 255;
+	treeSliderSlideIn =jQuery(window).width() - currentSiteOffset.left + 100;
 }
 
-
-
-/**
- * slide theme tree inside visible part
- */
-function showThemeTree() {
-	var currentSiteOffset = jQuery('.extgmaps').offset();
-	jQuery('.treeSlider').animate({
-		'left': jQuery(window).width() - currentSiteOffset.left + 255
-	}, 200, 'swing', function() {
-		jQuery('.js_arrow_left').show();
-		jQuery('.js_arrow_right').hide();
-	});
-}
-
-/**
- * slide theme tree outside visible part
- */
-function hideThemeTree() {
-	var currentSiteOffset = jQuery('.extgmaps').offset();
-	jQuery('.treeSlider').animate({
-		'left': jQuery(window).width() - currentSiteOffset.left + 100
-	}, 200, 'swing', function() {
-		jQuery('.js_arrow_left').hide();
-		jQuery('.js_arrow_right').show();
-	});
-}
-
-var sliderVisible = false;
-jQuery('.js_sliderImg').click(function() {
-	if(sliderVisible) {
-		hideThemeTree();
-		sliderVisible = false;
-	} else {
-		showThemeTree();
-		sliderVisible = true;
-	}
-});

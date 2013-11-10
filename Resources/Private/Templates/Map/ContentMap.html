@@ -3,8 +3,15 @@
 <f:section name="main">
 
     <ext:css src="ContentMap" />
+    <ext:javaScript src="ContentMap" footer="1"/>
+    <ext:javaScript src="ThemeTreeSlider" footer="1"/>
     <ext:javaScript footer="1">
         var extGMapType = '{extGMapType}';
+        var disableMapScrolling = false;
+        var currentSiteOffset;
+        var treeSliderSlideOut;
+        var treeSliderSlideIn;
+        setArrowSliderPosition();
     </ext:javaScript>
     <f:render partial="Map" arguments="{_all}"/>
 </f:section>
