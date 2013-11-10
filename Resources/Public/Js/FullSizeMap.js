@@ -80,7 +80,6 @@ function resizeMap(firstCall) {
 	});
 
 	if(!firstCall) {
-		console.log('resize');
 		google.maps.event.trigger(extGoogleMap, "resize");
 	}
 }
