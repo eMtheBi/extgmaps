@@ -5,6 +5,7 @@
     <ext:css src="FullScreenMap" />
     <ext:javaScript footer="1">
         var extGMapType = 'extGMapType';
+        var disableMapScrolling = false;
     </ext:javaScript>
 
     <ext:css src="Map"/>
@@ -29,13 +30,7 @@
 
 
 
-        <div class="js_treeSlider treeSlider">
-            <div class="js_sliderImg sliderImg">
-                <f:image class="js_arrow_right" src="{f:uri.resource(path:'Images/arrow_right.png')}" alt="" />
-                <f:image class="js_arrow_left" src="{f:uri.resource(path:'Images/arrow_left.png')}" alt="" style="display:none" />
-            </div>
-            <f:render partial="Tree" arguments="{_all}" />
-        </div>
+        <f:render partial="Tree" arguments="{_all}" />
 
 
         <div id="js_extGMaps" class="map {extGMapType}"></div>

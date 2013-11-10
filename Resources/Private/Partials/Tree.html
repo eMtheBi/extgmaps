@@ -1,26 +1,32 @@
-<div class="themeTree js_themeTree js_level0">
-    <div class="js_themeTree js_level1">
-        <input type="checkbox" name="category" class="js_categoryBox js_level1" id="js_showAll" value="0">
-        <label for="js_showAll">
-            <f:translate key="allMarker" />
-        </label>
+<div class="js_treeSlider treeSlider">
+    <div class="js_sliderImg sliderImg">
+        <f:image class="js_arrow_right" src="{f:uri.resource(path:'Images/arrow_right.png')}" alt="" />
+        <f:image class="js_arrow_left" src="{f:uri.resource(path:'Images/arrow_left.png')}" alt="" style="display:none" />
     </div>
-    <f:for each="{themeTree.children}" as="themes">
+    <div class="themeTree js_themeTree js_level0">
         <div class="js_themeTree js_level1">
-            <input type="checkbox" name="category" class="js_categoryBox js_level1" id="theme_{themes.id}" value="{category.id}">
-            <label for="theme_{themes.id}">{themes.label}</label>
-            <div class="children">
-                <f:for each="{themes.children}" as="category">
-                    <f:comment>
-                        <f:debug>{category}</f:debug>
-                    </f:comment>
-                    <div class="js_themeTree js_level2 js_category js_category{category.id}" id="{category.id}">
-                        <input type="checkbox" name="category" class="js_categoryBox js_level2" id="category_{category.id}" value="{category.id}">
-                        <label for="category_{category.id}">{category.label}</label>
-                    </div>
-                </f:for>
-            </div>
+            <input type="checkbox" name="category" class="js_categoryBox js_level1" id="js_showAll" value="0">
+            <label for="js_showAll">
+                <f:translate key="allMarker" />
+            </label>
         </div>
-    </f:for>
+        <f:for each="{themeTree.children}" as="themes">
+            <div class="js_themeTree js_level1">
+                <input type="checkbox" name="category" class="js_categoryBox js_level1" id="theme_{themes.id}" value="{category.id}">
+                <label for="theme_{themes.id}">{themes.label}</label>
+                <div class="children">
+                    <f:for each="{themes.children}" as="category">
+                        <f:comment>
+                            <f:debug>{category}</f:debug>
+                        </f:comment>
+                        <div class="js_themeTree js_level2 js_category js_category{category.id}" id="{category.id}">
+                            <input type="checkbox" name="category" class="js_categoryBox js_level2" id="category_{category.id}" value="{category.id}">
+                            <label for="category_{category.id}">{category.label}</label>
+                        </div>
+                    </f:for>
+                </div>
+            </div>
+        </f:for>
 
+    </div>
 </div>
