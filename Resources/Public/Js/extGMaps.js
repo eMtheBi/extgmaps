@@ -7,9 +7,9 @@ var selCats = [];
 var selTags = [];
 var selTypes = [];
 var listClusterMarkers = [];
-var mapIconSmall = '/typo3conf/ext/extgmaps/Resources/Public/Images/MapCluster/bubble-green-small.png'
-var mapIconMiddle = '/typo3conf/ext/extgmaps/Resources/Public/Images/MapCluster/bubble-green-middle.png'
-var mapIconBig = '/typo3conf/ext/extgmaps/Resources/Public/Images/MapCluster/bubble-green-big.png'
+var mapIconSmall = '/typo3conf/ext/extgmaps/Resources/Public/Images/MapCluster/clusterIconSmall.png'
+var mapIconMiddle = '/typo3conf/ext/extgmaps/Resources/Public/Images/MapCluster/clusterIconMiddle.png'
+var mapIconBig = '/typo3conf/ext/extgmaps/Resources/Public/Images/MapCluster/clusterIconBig.png'
 
 var extGoogleMapStyles = [
 	{
@@ -17,7 +17,7 @@ var extGoogleMapStyles = [
 		height: 45,
 		width: 45,
 		anchor: [0, 0],
-		textColor: '#ffffff',
+		textColor: '#000',
 		textSize: 10
 	},
 	{
@@ -25,7 +25,7 @@ var extGoogleMapStyles = [
 		height: 45,
 		width: 45,
 		anchor: [0, 0],
-		textColor: '#ffffff',
+		textColor: '#000',
 		textSize: 11
 	},
 	{
@@ -33,7 +33,7 @@ var extGoogleMapStyles = [
 		height: 45,
 		width: 45,
 		anchor: [0, 0],
-		textColor: '#ffffff',
+		textColor: '#000',
 		textSize: 12
 	}
 ];
