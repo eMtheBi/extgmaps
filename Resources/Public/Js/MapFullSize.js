@@ -50,7 +50,7 @@ function hideThemeTree() {
 	});
 }
 
-var sliderVisible = true;
+var sliderVisible = false;
 jQuery('.js_sliderImg').click(function() {
 	if(sliderVisible) {
 		hideThemeTree();
