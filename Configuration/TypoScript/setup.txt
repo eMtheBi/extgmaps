@@ -38,6 +38,7 @@ plugin.tx_extgmaps._CSS_DEFAULT_STYLE (
 	}
 )
 plugin.tx_extgmaps.settings {
+	disableScrollWheelOnMap = 0
 	fallbackGridSize = 10
 	tableMappings {
 		emthebi\Extgmaps\Domain\Model\Content = tt_content

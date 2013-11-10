@@ -192,6 +192,7 @@ class MapController extends ActionController {
 		$this->view->assign('gridSize', $gridSize);
 		$this->view->assign('mapObjectsAsJson', $mapObjectsAsJson);
 		$this->view->assign('extGMapType',$this->request->getControllerActionName());
+		$this->view->assign('disableScrollWheelOnMap',$this->getScrollWheelStatusForMap());
 	}
 
 	/**
@@ -252,6 +253,7 @@ class MapController extends ActionController {
 		$this->view->assign('gridSize', $gridSize);
 		$this->view->assign('mapObjectsAsJson', $mapObjectsAsJson);
 		$this->view->assign('extGMapType',$this->request->getControllerActionName());
+		$this->view->assign('disableScrollWheelOnMap',$this->getScrollWheelStatusForMap());
 	}
 	/**
 	 * Action for map which has to be placed on pages
@@ -288,6 +290,7 @@ class MapController extends ActionController {
 		$this->view->assign('gridSize', $gridSize);
 		$this->view->assign('mapObjectsAsJson', $mapObjectsAsJson);
 		$this->view->assign('extGMapType',$this->request->getControllerActionName());
+		$this->view->assign('disableScrollWheelOnMap',$this->getScrollWheelStatusForMap());
 	}
 
 	/**
@@ -319,6 +322,26 @@ class MapController extends ActionController {
 			$ids = array();
 		}
 		return $ids;
+	}
+
+	/**
+	 * helper function to get value for disable or enable scroll wheel on map
+	 * @return string
+	 */
+	public function getScrollWheelStatusForMap() {
+		$statusFromTS = $this->settings['disableScrollWheelOnMap'];
+
+		$status = 0;
+		if ($statusFromTS == '1') {
+			$status = 1;
+		}
+
+		// flexForm overwrites default value
+		$flexFormStatus = $this->settings['flexFormDisableScrollWheelOnMap'];
+		if (!empty($flexFormStatus)) {
+			$status = $flexFormStatus;
+		}
+		return $status;
 	}
 
 	public function createThemeTree() {

@@ -11,9 +11,7 @@ jQuery('.js_toogleMapContainer').click(function() {
 
 	scrollPosition = jQuery(window).scrollTop();
 	mapIsVisible = true;
-	if (disableMapScrolling) {
-		extGoogleMap.setOptions({scrollwheel: false});
-	}
+
 	jQuery('.js_fullSizeMapContainer').show();
 
 	setArrowSliderPosition();
@@ -26,6 +24,9 @@ jQuery('.js_toogleMapContainer').click(function() {
 		mapIsInitialised = true;
 	} else {
 		resizeMap(false);
+	}
+	if (disableMapScrolling) {
+		extGoogleMap.setOptions({scrollwheel: false});
 	}
 
 	jQuery(window).scrollTop(0);

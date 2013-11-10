@@ -108,6 +108,9 @@
 			<trans-unit id="singleMapFlexForm.flexFormMapIcon">
 				<source>map icon</source>
 			</trans-unit>
+			<trans-unit id="singleMapFlexForm.disableScrollWheelOnMap">
+				<source>disable scrollwheel on map</source>
+			</trans-unit>
 
 			<trans-unit id="contentMapFlexForm.sheetTitle">
 				<source>content map config</source>
@@ -117,6 +120,9 @@
 			</trans-unit>
 			<trans-unit id="contentMapFlexForm.mapType">
 				<source>google map type </source>
+			</trans-unit>
+			<trans-unit id="contentMapFlexForm.disableScrollWheelOnMap">
+				<source>disable scrollwheel on map</source>
 			</trans-unit>
 
 			<trans-unit id="categoryAndTagsFlexForm.sheetTitle">

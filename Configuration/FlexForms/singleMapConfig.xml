@@ -133,6 +133,14 @@
 							</config>
 						</TCEforms>
 					</settings.flexFormMapType>
+					<settings.flexFormDisableScrollWheelOnMap>
+						<TCEforms>
+							<label>LLL:EXT:extgmaps/Resources/Private/Language/locallang_db.xlf:singleMapFlexForm.disableScrollWheelOnMap</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</settings.flexFormDisableScrollWheelOnMap>
 				</el>
 			</ROOT>
 		</sDEF>
