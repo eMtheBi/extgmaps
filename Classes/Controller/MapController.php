@@ -193,6 +193,7 @@ class MapController extends ActionController {
 		$this->view->assign('mapObjectsAsJson', $mapObjectsAsJson);
 		$this->view->assign('extGMapType',$this->request->getControllerActionName());
 		$this->view->assign('disableScrollWheelOnMap',$this->getScrollWheelStatusForMap());
+		$this->view->assign('contentId',$this->configurationManager->getContentObject()->data['uid']);
 	}
 
 	/**
@@ -254,6 +255,7 @@ class MapController extends ActionController {
 		$this->view->assign('mapObjectsAsJson', $mapObjectsAsJson);
 		$this->view->assign('extGMapType',$this->request->getControllerActionName());
 		$this->view->assign('disableScrollWheelOnMap',$this->getScrollWheelStatusForMap());
+		$this->view->assign('contentId',$this->configurationManager->getContentObject()->data['uid']);
 	}
 	/**
 	 * Action for map which has to be placed on pages
@@ -291,6 +293,7 @@ class MapController extends ActionController {
 		$this->view->assign('mapObjectsAsJson', $mapObjectsAsJson);
 		$this->view->assign('extGMapType',$this->request->getControllerActionName());
 		$this->view->assign('disableScrollWheelOnMap',$this->getScrollWheelStatusForMap());
+		$this->view->assign('contentId',$this->configurationManager->getContentObject()->data['uid']);
 	}
 
 	/**
@@ -357,6 +360,7 @@ class MapController extends ActionController {
 			$this->addChildToThemesTree($theme->getUid(),$themeChild);
 		}
 	}
+
 	/**
 	 * get an Object an fill array with information which will be used from map marker
 	 *
@@ -430,7 +434,16 @@ class MapController extends ActionController {
 					case 'tags':
 					case 'categories':
 						$items = array();
-
+						/* @var Content  $currentObject*/
+//						$mapIcon = $currentObject->getImage();
+//						if (!empty($mapIcon)) {
+//						/* @var \TYPO3\CMS\Core\Resource\FileReference  $mapIcon*/
+//
+//							DebugUtility::debug($mapIcon->getPublicUrl());
+//							if (!isset($mapMarker['mapIcon'])) {
+//								$mapMarker['mapIcon'] = $mapIcon->getPublicUrl();
+//							}
+//						}
 						foreach($currentObject->_getProperty($objectProperty) as $tagOrCategory) {
 							/* @var BasicTreeModel $tagOrCategory */
 
@@ -454,6 +467,13 @@ class MapController extends ActionController {
 									$this->addChildToTagsTree($tagOrCategory->getUid(), $treeChild);
 									break;
 								case 'categories':
+									$fal = $tagOrCategory->getMapIcon()->current();
+									/* @var \TYPO3\CMS\Extbase\Domain\Model\FileReference $fal */
+
+									if (!isset($mapMarker['mapIcon'])) {
+										$mapMarker['mapIcon'] = $fal->getOriginalResource()->getPublicUrl();
+									}
+
 									$this->addChildToCategoriesTree($tagOrCategory->getUid(), $treeChild);
 									break;
 							}
@@ -474,7 +494,10 @@ class MapController extends ActionController {
 		}
 
 		foreach($staticDataForGroups as $key => $staticData) {
-			$mapMarker[$key] = $staticData;
+			// fallback for objects without category
+			if ($key == 'mapIcon' && !isset($mapMarker['mapIcon'])) {
+				$mapMarker[$key] = $staticData;
+			}
 		}
 
 		return $mapMarker;

@@ -35,8 +35,6 @@ function hideThemeTree() {
 
 var sliderVisible = false;
 jQuery('.js_sliderImg').click(function() {
-	console.log(treeSliderSlideIn);
-	console.log(treeSliderSlideOut);
 	if(sliderVisible) {
 		hideThemeTree();
 		sliderVisible = false;

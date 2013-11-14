@@ -16,14 +16,25 @@ jQuery('.js_categoryBox').click(function() {
 
 	var currentTreeDivState = jQuery(currentTreeDiv).find('.js_level' + currentLevel + ':checkbox').is(':checked');
 	var currentId = parseInt(jQuery(this).val());
+	var mapObject = null;
+	var currentContentElement = jQuery(this).closest('.extgmaps').parent().attr('id');
+
+	// get objects for current map
+	jQuery(mapObjects).each(function(){
+		if('c' + this.contentId == currentContentElement) {
+			mapObject = this;
+		}
+	});
+
+
 	if(currentTreeDivState === true) {
 		// checkbox is now selected
-
 		if(jQuery(this).attr('id') == 'js_showAll') {
+
 			// special case for show all checkbox
-			showAllMarker();
+			showAllMarker(mapObject);
 		} else {
-			unCheckShowAll();
+			unCheckShowAll(mapObject);
 			if(currentId != '') {
 				handelStack(currentId, 'add');
 			}
@@ -35,24 +46,24 @@ jQuery('.js_categoryBox').click(function() {
 		// checkbox is now unselected
 
 		//close infoBox
-		infoBox.close();
+		infoBox[mapObject.contentId].close();
 		if(currentId != '') {
 			handelStack(currentId, 'remove');
 		}
-		unCheckShowAll();
+		unCheckShowAll(mapObject);
 
 		removeParents(currentTreeDiv, parentLevel);
 		unCheckChildren(currentTreeDiv);
 	}
 	// filter for selected checkboxes (exclude #js_showAll)
 	if(jQuery(this).attr('id') != 'js_showAll') {
-		filterMarker();
+		filterMarker(mapObject);
 	}
 });
 
-function unCheckShowAll() {
+function unCheckShowAll(mapObject) {
 	jQuery('#js_showAll:checkbox').attr('checked', false);
-	filterMarker();
+	filterMarker(mapObject);
 }
 
 /**

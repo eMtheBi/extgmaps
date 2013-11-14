@@ -47,7 +47,7 @@ class BasicTreeModel extends AbstractEntity {
 	/**
 	 * icon for map
 	 *
-	 * @var string
+	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\TYPO3\CMS\Extbase\Domain\Model\FileReference>
 	 * @validate NotEmpty
 	 */
 	protected $mapIcon;
@@ -72,22 +72,21 @@ class BasicTreeModel extends AbstractEntity {
 	}
 
 	/**
-	 * Returns the mapIcon
-	 *
-	 * @return string $mapIcon
-	 */
-	public function getMapIcon() {
-		return $this->mapIcon;
-	}
-
-	/**
 	 * Sets the mapIcon
 	 *
-	 * @param string $mapIcon
-	 * @return void
+	 * @param \TYPO3\CMS\Extbase\Persistence\ObjectStorage $mapIcon
 	 */
 	public function setMapIcon($mapIcon) {
 		$this->mapIcon = $mapIcon;
+	}
+
+	/**
+	 * Returns the mapIcon
+	 *
+	 * @return \TYPO3\CMS\Extbase\Persistence\ObjectStorage
+	 */
+	public function getMapIcon() {
+		return $this->mapIcon;
 	}
 
 }

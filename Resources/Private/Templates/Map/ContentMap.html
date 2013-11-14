@@ -3,9 +3,22 @@
 <f:section name="main">
 
     <ext:css src="ContentMap" />
+    <ext:javaScript>
+        var mapObjects = [];
+    </ext:javaScript>
     <ext:javaScript src="ContentMap" footer="1"/>
     <ext:javaScript src="ThemeTreeSlider" footer="1"/>
     <ext:javaScript footer="1">
+        var mapData = new Object();
+        mapData.extGMapType ='{extGMapType}';
+        mapData.disableMapScrolling = {disableScrollWheelOnMap};
+        mapData.contentId ='{contentId}';
+        mapData.mapDataJson = {mapObjectsAsJson -> f:format.htmlentitiesDecode()};
+        mapData.defaultGeoCoordinates = {mapDefaultGeoData -> f:format.htmlentitiesDecode()};
+        mapData.gridSize = '{gridSize}';
+        mapData.mapType = '{mapType}';
+        mapObjects.push(mapData);
+
         var extGMapType = '{extGMapType}';
         var disableMapScrolling = {disableScrollWheelOnMap};
         var currentSiteOffset;

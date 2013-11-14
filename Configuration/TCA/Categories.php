@@ -105,15 +105,7 @@ $TCA['tx_extgmaps_domain_model_categories'] = array(
 		'map_icon' => array(
 			'exclude' => 0,
 			'label' => 'LLL:EXT:extgmaps/Resources/Private/Language/locallang_db.xlf:tx_extgmaps_domain_model_categories.map_icon',
-			'config' => array(
-				'type' => 'group',
-				'internal_type' => 'file',
-				'uploadfolder' => 'uploads/tx_extgmaps',
-				'show_thumbs' => 1,
-				'size' => 5,
-				'allowed' => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
-				'disallowed' => '',
-			),
+			'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig('images'),
 		),
 		'page' => array(
 			'config' => array(
